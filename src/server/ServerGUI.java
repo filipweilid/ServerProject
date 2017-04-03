@@ -20,8 +20,8 @@ public class ServerGUI extends JPanel {
 		
 	}
 	
-	public void addlog(String text, Calendar c){
-		log = log + c.getTime() + ": " + text + "\n";
+	public void addlog(String text, Calendar c, String sender){
+		log = log + c.getTime() + ": " + text + " sent from: " + sender + "\n";
 		this.text.setText(log);
 	}
 	

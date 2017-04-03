@@ -26,9 +26,8 @@ public class TestServer {
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
 				c = Calendar.getInstance();
-				gui.addlog(number, c);
+				gui.addlog(number, c, socket.getInetAddress().toString());
 				System.out.println("Message received from client is " + number);
-				System.out.println(socket.getInetAddress());
 				// Multiplying the number by 2 and forming the return message
 				String returnMessage;
 				try {

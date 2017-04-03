@@ -2,13 +2,11 @@ package pcClient;
 
 import java.io.*;
 import java.net.*;
-import java.util.Calendar;
-
 
 public class TestClient {
 
 	private static Socket socket;
-	private String host = "localhost";
+	private String host = "10.2.7.202";
 	private int port = 25000;
 
 	public void sendMessage(String message) {
