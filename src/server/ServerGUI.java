@@ -16,7 +16,7 @@ public class ServerGUI extends JPanel {
 		setLayout(new BorderLayout());
 		text.setText(log);
 		setPreferredSize(new Dimension(500, 500));
-		add(text, BorderLayout.CENTER);
+		add(text, BorderLayout.CENTER); 
 		
 	}
 	
