@@ -2,12 +2,16 @@ package server;
 
 import java.io.*;
 import java.net.*;
+import java.util.Calendar;
 
 public class TestServer {
 
 	private static Socket socket;
+	private ServerGUI gui;
+	private Calendar c;
 
-	public TestServer(int port) {
+	public TestServer(int port, ServerGUI gui) {
+		this.gui = gui;
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("Server Started and listening to the port 25000");
@@ -21,8 +25,10 @@ public class TestServer {
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
+				c = Calendar.getInstance();
+				gui.addlog(number, c);
 				System.out.println("Message received from client is " + number);
-
+				System.out.println(socket.getInetAddress());
 				// Multiplying the number by 2 and forming the return message
 				String returnMessage;
 				try {
@@ -35,7 +41,7 @@ public class TestServer {
 					// client.
 					returnMessage = "Please send a proper number\n";
 				}
-
+				
 				// Sending the response back to the client.
 				OutputStream os = socket.getOutputStream();
 				OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -55,6 +61,5 @@ public class TestServer {
 	}
 	
 	public static void main(String[] args) {
-		new TestServer(25000);
 	}
 }
