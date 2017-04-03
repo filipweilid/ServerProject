@@ -31,6 +31,7 @@ public class TestServer {
 					int numberInIntFormat = Integer.parseInt(number);
 					int returnValue = numberInIntFormat * 2;
 					returnMessage = String.valueOf(returnValue) + "\n";
+					
 				} catch (NumberFormatException e) {
 					// Input was not a number. Sending proper message back to
 					// client.
