@@ -8,11 +8,9 @@ import javax.swing.JOptionPane;
 public class TestClient {
 
 	private static Socket socket;
-
-	public static void main(String args[]) {
+	
+	public TestClient(String host, int port) {
 		try {
-			String host = "localhost";
-			int port = 25000;
 			InetAddress address = InetAddress.getByName(host);
 			socket = new Socket(address, port);
 
@@ -44,5 +42,9 @@ public class TestClient {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static void main(String args[]) {
+		new TestClient("localhost", 25000);
 	}
 }
