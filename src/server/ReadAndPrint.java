@@ -1,4 +1,4 @@
-package pcClient;
+package server;
 
 public class ReadAndPrint {
 
