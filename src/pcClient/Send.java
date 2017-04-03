@@ -13,34 +13,17 @@ public class Send {
 
 		return fis;
 	}
-
-	public void Sender() throws UnknownHostException, IOException {
-
-		Socket s = new Socket("localhost", 4711);
-		PrintWriter sockOut = new PrintWriter(s.getOutputStream());
+	
+	public Send(String ip, int port) throws UnknownHostException, IOException {
+		Socket s = new Socket(ip, port);
+		PrintWriter sockOut = new PrintWriter(s.getOutputStream(), true);
 		System.out.println("Client connected");
-		if (fis = true) {
-			sockOut.append("Accept");
-		}
-		sockOut.close(); // Flushes the out stream.
+		sockOut.close();
 		s.close();
 	}
 
 	public static void main(String[] args) throws IOException, UnknownHostException {
 
-		Send b = new Send();
-		b.button();
-		b.Sender();
-		// Socket s = new Socket("localhost", 4711);
-		// PrintWriter sockOut = new PrintWriter(s.getOutputStream());
-		// System.out.println("Client connected");
-		//
-		// sockOut.append("Accept");
-		//
-		//
-		// sockOut.close(); //Flushes the out stream.
-		// s.close();
-
+		new Send("localhost", 4711);
 	}
-
 }
