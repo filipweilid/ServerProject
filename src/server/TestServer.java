@@ -7,10 +7,8 @@ public class TestServer {
 
 	private static Socket socket;
 
-	public static void main(String[] args) {
+	public TestServer(int port) {
 		try {
-
-			int port = 25000;
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("Server Started and listening to the port 25000");
 
@@ -54,5 +52,9 @@ public class TestServer {
 			} catch (Exception e) {
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		new TestServer(25000);
 	}
 }
