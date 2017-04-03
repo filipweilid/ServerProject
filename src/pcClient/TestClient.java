@@ -2,6 +2,8 @@ package pcClient;
 
 import java.io.*;
 import java.net.*;
+
+import javax.swing.JOptionPane;
  
 public class TestClient
 {
@@ -22,7 +24,7 @@ public class TestClient
             OutputStreamWriter osw = new OutputStreamWriter(os);
             BufferedWriter bw = new BufferedWriter(osw);
  
-            String number = "2";
+            String number = JOptionPane.showInputDialog("");
  
             String sendMessage = number + "\n";
             bw.write(sendMessage);
