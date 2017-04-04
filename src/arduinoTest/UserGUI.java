@@ -24,8 +24,8 @@ public class UserGUI extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnSend) {
 			try {
-				ClientSend client = new ClientSend(TOOL_TIP_TEXT_KEY, 8888);
-			} catch (SocketException e1) {
+				ClientSend.main(null);
+				} catch (SocketException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
