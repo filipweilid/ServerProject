@@ -22,7 +22,7 @@ public class TestServer {
 				// Reading the message from the client
 				socket = serverSocket.accept();
 				InputStream is = socket.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is);
+				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
 				c = Calendar.getInstance();
