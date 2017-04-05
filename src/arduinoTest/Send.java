@@ -47,7 +47,6 @@ public class Send {
 	}
 
 	public class RecievePackage implements Runnable {
-		
 		@Override
 		public void run() {
 			while (true) {
