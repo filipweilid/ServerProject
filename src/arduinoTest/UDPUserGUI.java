@@ -9,14 +9,14 @@ import java.net.SocketException;
 
 import javax.swing.*;
 
-import arduinoTest.Send.SendUdpPackage;
+import arduinoTest.UDPSend.SendUdpPackage;
 
 public class UDPUserGUI extends JPanel implements ActionListener {
 	private JButton btnOn = new JButton("Tänd 1");
 	private JButton btnOn2 = new JButton("Tänd 2");
 	private JButton btnOff = new JButton("Släck 1");
 	private JButton btnOff2 = new JButton("Släck 2");
-	private Send udpsend;
+	private UDPSend udpsend;
 	private JPanel panel = new JPanel(new GridLayout(2,2));
 	
 	
@@ -34,7 +34,7 @@ public class UDPUserGUI extends JPanel implements ActionListener {
 		btnOff2.addActionListener(this);
 		
 		 try {
-			udpsend = new Send("192.168.0.10", 8888);
+			udpsend = new UDPSend("192.168.0.10", 8888);
 			
 		} catch (SocketException e) {
 			e.printStackTrace();

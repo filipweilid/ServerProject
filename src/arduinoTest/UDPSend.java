@@ -3,12 +3,12 @@ package arduinoTest;
 import java.io.IOException;
 import java.net.*;
 
-public class Send {
+public class UDPSend {
 	private String ipAddress;
 	private int port;
 	private DatagramSocket socket;
 
-	public Send(String ipAddress, int port) throws SocketException {
+	public UDPSend(String ipAddress, int port) throws SocketException {
 		this.ipAddress = ipAddress;
 		this.port = port;
 		socket = new DatagramSocket();
