@@ -52,9 +52,11 @@ public class UserGUI extends JPanel implements ActionListener {
 		}
 		if(e.getSource() == btnOff){
 //			udpsend.send("diod1off");
+			udpsend.send("3");
 		}
 		if(e.getSource() == btnOff2){
 //			udpsend.send("diod2off");
+			udpsend.send("4");
 		}
 	}
 	
