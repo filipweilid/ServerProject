@@ -2,6 +2,7 @@ package arduinoTest;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.SocketException;
@@ -11,31 +12,48 @@ import javax.swing.*;
 import arduinoTest.Send.SendUdpPackage;
 
 public class UserGUI extends JPanel implements ActionListener {
-	private JButton btnSend = new JButton("Skicka");
+	private JButton btnOn = new JButton("Tänd 1");
+	private JButton btnOn2 = new JButton("Tänd 2");
+	private JButton btnOff = new JButton("Släck 1");
+	private JButton btnOff2 = new JButton("Släck 2");
 	private Send udpsend;
+	private JPanel panel = new JPanel(new GridLayout(2,2));
 	//private ClientSend client = new ClientSend();
 	
 	public UserGUI() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(500, 500));
-		add(btnSend, BorderLayout.CENTER);
-		btnSend.addActionListener(this);
+		add(panel, BorderLayout.CENTER);
+		panel.add(btnOn);
+		panel.add(btnOff);
+		panel.add(btnOn2);
+		panel.add(btnOff2);
+		btnOn.addActionListener(this);
+		btnOff.addActionListener(this);
+		btnOn2.addActionListener(this);
+		btnOff2.addActionListener(this);
 		
 		 try {
 			udpsend = new Send("192.168.0.10", 8888);
 			
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource() == btnSend) {
-			udpsend.send();
-			
+		if(e.getSource() == btnOn) {
+			udpsend.send("diod1on");
+		}
+		if(e.getSource() == btnOn2){
+			udpsend.send("diod2on");
+		}
+		if(e.getSource() == btnOff){
+			udpsend.send("diod1off");
+		}
+		if(e.getSource() == btnOff2){
+			udpsend.send("diod2off");
 		}
 	}
 	

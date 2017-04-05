@@ -17,9 +17,9 @@ public class Send {
 
 	}
 	
-	public void send(){
+	public void send(String message){
 		SendUdpPackage SB = new SendUdpPackage();
-		SB.send("hej");
+		SB.send(message);
 	}
 
 	public class SendUdpPackage implements Runnable {
@@ -47,11 +47,10 @@ public class Send {
 	}
 
 	public class RecievePackage implements Runnable {
-		byte[] buffer = new byte[30];
+		byte[] buffer = new byte[15];
 
 		@Override
 		public void run() {
-
 			while (true) {
 				DatagramPacket recPacket = new DatagramPacket(buffer, buffer.length);
 				try {
