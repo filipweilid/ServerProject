@@ -25,6 +25,8 @@ public class ClientGUI extends JPanel implements ActionListener {
 	private JButton On2 = new JButton("Sätt på Lampa 2");
 	private JButton Off = new JButton("Släck Lampa 1");
 	private JButton Off2 = new JButton("Släck Lampa 2");
+	private SendMessage send = new SendMessage();
+	private ServerController server = new ServerController();
 
 	public ClientGUI() {
 		setLayout(new BorderLayout());
@@ -42,8 +44,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		SendMessage send = new SendMessage();
-		ServerController server = new ServerController();
+		
 		if (e.getSource() == On) {
 			send.Message("H2");
 			server.logDatabase("Tände lampa 1", send.getHost(), "Kalle");

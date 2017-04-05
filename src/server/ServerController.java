@@ -16,7 +16,7 @@ public class ServerController {
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
 	
 	public ServerController() {
-		TestServer test = new TestServer(25000, this);
+//		TestServer test = new TestServer(25000, this);
 	}
 	
 	public void logDatabase(String text, String ip, String username) {
