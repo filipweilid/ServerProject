@@ -6,7 +6,7 @@ import java.net.*;
 public class TestClient {
 
 	private static Socket socket;
-	private String host = "localhost";
+	private String host = "10.2.15.219";
 	private int port = 25000;
 
 	public void sendMessage(String message) {
