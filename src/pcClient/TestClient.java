@@ -6,8 +6,8 @@ import java.net.*;
 public class TestClient {
 
 	private static Socket socket;
-	private String host = "10.2.15.219";
-	private int port = 25000;
+	private String host = "192.168.0.10";
+	private int port = 8888;
 
 	public void sendMessage(String message) {
 		try {
@@ -23,11 +23,11 @@ public class TestClient {
 			bw.flush();
 			System.out.println("Message sent to the server : " + sendMessage);
 			// Get the return message from the server
-//			InputStream is = socket.getInputStream();
-//			InputStreamReader isr = new InputStreamReader(is);
-//			BufferedReader br = new BufferedReader(isr);
-//			String returnMessage = br.readLine();
-//			System.out.println("Message received from the server : " + returnMessage);
+			InputStream is = socket.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String returnMessage = br.readLine();
+			System.out.println("Message received from the server : " + returnMessage);
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
