@@ -35,6 +35,7 @@ public class MongoDBTest extends JPanel implements ActionListener {
 	private MongoClient mongoClient = new MongoClient("35.157.249.193", 27017);
 	private MongoDatabase database = mongoClient.getDatabase("test");
 	private MongoCollection<Document> collection = database.getCollection("users");
+	private JFrame frame;
 	
 	public MongoDBTest() {
 //		Document user = new Document("Username", "test").append("Password", "test");
@@ -46,6 +47,12 @@ public class MongoDBTest extends JPanel implements ActionListener {
 		add(grid, BorderLayout.CENTER);
 		add(btnLogin, BorderLayout.SOUTH);
 		btnLogin.addActionListener(this);
+		frame = new JFrame("MongoDB");
+		frame.setLocation(500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(this);
+		frame.pack();
+		frame.setVisible(true);
 	}
 	
 //	Block<Document> printBlock = new Block<Document>() {
@@ -61,6 +68,8 @@ public class MongoDBTest extends JPanel implements ActionListener {
 		if(e.getSource() == btnLogin) {
 			if(collection.find(and(eq("Username", tfUsername.getText()), eq("Username", tfPassword.getText()))).first() != null) {
 				System.out.println("Success");
+				StartClient.main(null);
+				frame.setVisible(false);
 			}
 			
 //			MongoCursor<Document> cursor = collection.find(and(eq("Username", tfUsername.getText()), eq("Username", tfPassword.getText()))).iterator();
@@ -75,12 +84,6 @@ public class MongoDBTest extends JPanel implements ActionListener {
 	}
 	
 	public static void main(String args[]) {
-		MongoDBTest test = new MongoDBTest();
-		JFrame frame = new JFrame("MongoDB");
-		frame.setLocation(500, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(test);
-		frame.pack();
-		frame.setVisible(true);
+		new MongoDBTest();
 	}
 }
