@@ -12,7 +12,8 @@ import com.mongodb.client.*;
 public class ServerController {
 	private MongoClient mongoClient = new MongoClient("35.157.249.193", 27017);
 	private MongoDatabase database = mongoClient.getDatabase("test");
-	private MongoCollection<Document> collection = database.getCollection("log");
+	private MongoCollection<Document> logCollection = database.getCollection("log");
+	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
 	
 	public ServerController() {
 		TestServer test = new TestServer(25000, this);
@@ -31,7 +32,14 @@ public class ServerController {
 	               .append("message", text);
 	                                       
 
-	collection.insertOne(document);
+		logCollection.insertOne(document);
+	}
+	
+	public void setLockStatus(String lock, String status){
+		Document document = new Document("lock", lock)
+				.append("status", status);
+		
+		lockCollection.insertOne(document);
 	}
 	
 	public static void main(String[] args) {
