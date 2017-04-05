@@ -1,4 +1,4 @@
-package server;
+package pcClient;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
