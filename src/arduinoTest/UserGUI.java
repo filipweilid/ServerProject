@@ -19,6 +19,7 @@ public class UserGUI extends JPanel implements ActionListener {
 	private Send udpsend;
 	private JPanel panel = new JPanel(new GridLayout(2,2));
 	
+	
 	public UserGUI() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(500, 500));
