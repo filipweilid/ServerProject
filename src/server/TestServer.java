@@ -29,9 +29,9 @@ public class TestServer {
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
 				String[] log = number.split(";");
-				if(log.length == 3) {
-					controller.logDatabase(log[0], log[1], log[2]);
-				} else {
+				if(log[0] == "log") {
+					controller.logDatabase(log[0], socket.getInetAddress().toString(), log[2]);
+				} else if(log[0] == "status"){
 					controller.logLockStatus(log[0], log[1]);
 				}
 				// Multiplying the number by 2 and forming the return message

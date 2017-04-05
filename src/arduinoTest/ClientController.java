@@ -13,7 +13,7 @@ import java.net.Socket;
  * @author Grupp4
  *
  */
-public class SendMessage {
+public class ClientController {
 	
 	private static Socket socket;
 	private String hostArduino = "192.168.0.10";
@@ -61,7 +61,7 @@ public class SendMessage {
 			OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
 			BufferedWriter bw = new BufferedWriter(osw);
 
-			String sendLog = text + ";" + socket.getInetAddress().toString() + ";" + username + "\n";
+			String sendLog = "log" + ";" + text + ";" + username + "\n";
 			bw.write(sendLog);
 			bw.flush();
 			System.out.println("Message sent to the server : " + sendLog);
@@ -92,7 +92,7 @@ public class SendMessage {
 			OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
 			BufferedWriter bw = new BufferedWriter(osw);
 
-			String sendStatusLog = lock + ";" + status + "\n";
+			String sendStatusLog = "status" + ";" + lock + ";" + status + "\n";
 			bw.write(sendStatusLog);
 			bw.flush();
 			System.out.println("Message sent to the server : " + sendStatusLog);
