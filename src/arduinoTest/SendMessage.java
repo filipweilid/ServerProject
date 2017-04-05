@@ -16,22 +16,24 @@ import java.net.Socket;
 public class SendMessage {
 	
 	private static Socket socket;
-	private String host = "192.168.0.10";
-	private int port = 8888;
+	private String hostArduino = "192.168.0.10";
+	private int portArduino = 8888;
+	private String hostServer = "10.2.15.219";
+	private int portServer = 25000;
 
-	public void Message(String message) {
+	public void changeStatus(String status) {
 		try {
-			InetAddress address = InetAddress.getByName(host);
-			socket = new Socket(address, port);
+			InetAddress address = InetAddress.getByName(hostArduino);
+			socket = new Socket(address, portArduino);
 			// Send the message to the server
 			OutputStream os = socket.getOutputStream();
-			OutputStreamWriter osw = new OutputStreamWriter(os);
+			OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
 			BufferedWriter bw = new BufferedWriter(osw);
 
-			String sendMessage = message + "\n";
-			bw.write(sendMessage);
+			String sendStatus = status + "\n";
+			bw.write(sendStatus);
 			bw.flush();
-			System.out.println("Message sent to the server : " + sendMessage);
+			System.out.println("Message sent to the server : " + sendStatus);
 			// Get the return message from the server
 			InputStream is = socket.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is);
@@ -50,7 +52,65 @@ public class SendMessage {
 		}	
 	}
 	
-	public String getHost() {
-		return host;
+	public void sendLog(String text, String username) {
+		try {
+			InetAddress address = InetAddress.getByName(hostServer);
+			socket = new Socket(address, portServer);
+			// Send the message to the server
+			OutputStream os = socket.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+			BufferedWriter bw = new BufferedWriter(osw);
+
+			String sendLog = text + ";" + socket.getInetAddress().toString() + ";" + username + "\n";
+			bw.write(sendLog);
+			bw.flush();
+			System.out.println("Message sent to the server : " + sendLog);
+			// Get the return message from the server
+			InputStream is = socket.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String returnMessage = br.readLine();
+			System.out.println("Message received from the server : " + returnMessage);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Closing the socket
+			try {
+				socket.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void sendStatusLog(String lock, String status) {
+		try {
+			InetAddress address = InetAddress.getByName(hostServer);
+			socket = new Socket(address, portServer);
+			// Send the message to the server
+			OutputStream os = socket.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+			BufferedWriter bw = new BufferedWriter(osw);
+
+			String sendStatusLog = lock + ";" + status + "\n";
+			bw.write(sendStatusLog);
+			bw.flush();
+			System.out.println("Message sent to the server : " + sendStatusLog);
+			// Get the return message from the server
+			InputStream is = socket.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String returnMessage = br.readLine();
+			System.out.println("Message received from the server : " + returnMessage);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Closing the socket
+			try {
+				socket.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

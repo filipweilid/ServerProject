@@ -28,8 +28,12 @@ public class TestServer {
 				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
-				controller.logDatabase(number, socket.getInetAddress().toString(), null);
-				System.out.println("Message received from client is " + number);
+				String[] log = number.split(";");
+				if(log.length == 3) {
+					controller.logDatabase(log[0], log[1], log[2]);
+				} else {
+					controller.logLockStatus(log[0], log[1]);
+				}
 				// Multiplying the number by 2 and forming the return message
 				String returnMessage;
 				try {
@@ -62,5 +66,6 @@ public class TestServer {
 	}
 	
 	public static void main(String[] args) {
+		
 	}
 }

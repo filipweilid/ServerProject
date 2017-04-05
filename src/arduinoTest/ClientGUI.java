@@ -17,7 +17,6 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import server.ServerController;
 
 public class ClientGUI extends JPanel implements ActionListener {
 	private JPanel panel = new JPanel(new GridLayout(2, 2));
@@ -26,7 +25,6 @@ public class ClientGUI extends JPanel implements ActionListener {
 	private JButton Off = new JButton("Släck Lampa 1");
 	private JButton Off2 = new JButton("Släck Lampa 2");
 	private SendMessage send = new SendMessage();
-	private ServerController server = new ServerController();
 
 	public ClientGUI() {
 		setLayout(new BorderLayout());
@@ -46,24 +44,24 @@ public class ClientGUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == On) {
-			send.Message("H2");
-			server.logDatabase("Tände lampa 1", send.getHost(), "Kalle");
-			server.setLockStatus("Lampa 1", "Tänd");
+			send.changeStatus("H2");
+			send.sendLog("Tände lampa 1", "Kalle");
+			send.sendStatusLog("lampa 1", "tänd");
 		}
 		if (e.getSource() == On2) {
-			send.Message("H3");
-			server.logDatabase("Tände lampa 2", send.getHost(), "Kalle");
-			server.setLockStatus("Lampa 2", "Tänd");
+			send.changeStatus("H3");
+			send.sendLog("Tände lampa 2", "Kalle");
+			send.sendStatusLog("lampa 2", "tänd");
 		}
 		if (e.getSource() == Off) {
-			send.Message("L2");
-			server.logDatabase("Släckte lampa 1", send.getHost(), "Kalle");
-			server.setLockStatus("Lampa 1", "Släckt");
+			send.changeStatus("L2");
+			send.sendLog("Släckte lampa 1", "Kalle");
+			send.sendStatusLog("lampa 1", "släckt");
 		}
 		if (e.getSource() == Off2) {
-			send.Message("L3");
-			server.logDatabase("Släckte lampa 2", send.getHost(), "Kalle");
-			server.setLockStatus("Lampa 2", "Släckt");
+			send.changeStatus("L3");
+			send.sendLog("Släckte lampa 2", "Kalle");
+			send.sendStatusLog("lampa 2", "släckt");
 		}
 
 	}

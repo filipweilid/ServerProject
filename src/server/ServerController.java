@@ -16,7 +16,7 @@ public class ServerController {
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
 	
 	public ServerController() {
-//		TestServer test = new TestServer(25000, this);
+		new TestServer(25000, this);
 	}
 	
 	public void logDatabase(String text, String ip, String username) {
@@ -35,7 +35,7 @@ public class ServerController {
 		logCollection.insertOne(document);
 	}
 	
-	public void setLockStatus(String lock, String status){
+	public void logLockStatus(String lock, String status){
 		Document document = new Document("lock", lock)
 				.append("status", status);
 		
