@@ -23,11 +23,11 @@ public class TestClient {
 			bw.flush();
 			System.out.println("Message sent to the server : " + sendMessage);
 			// Get the return message from the server
-			InputStream is = socket.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is);
-			BufferedReader br = new BufferedReader(isr);
-			String returnMessage = br.readLine();
-			System.out.println("Message received from the server : " + returnMessage);
+//			InputStream is = socket.getInputStream();
+//			InputStreamReader isr = new InputStreamReader(is);
+//			BufferedReader br = new BufferedReader(isr);
+//			String returnMessage = br.readLine();
+//			System.out.println("Message received from the server : " + returnMessage);
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
