@@ -59,7 +59,7 @@ public class Send {
 					e.printStackTrace();
 				}
 				recPacket.getData();
-				System.out.println("Medelandet "+ new String(recPacket.getData()) + "kom fram");
+				System.out.println("Medelandet **"+ new String(recPacket.getData()) + " **kom fram");
 			}
 		}
 	}
