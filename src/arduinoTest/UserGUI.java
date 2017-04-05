@@ -12,10 +12,10 @@ import javax.swing.*;
 import arduinoTest.Send.SendUdpPackage;
 
 public class UserGUI extends JPanel implements ActionListener {
-	private JButton btnOn = new JButton("Tänd 1");
-	private JButton btnOn2 = new JButton("Tänd 2");
-	private JButton btnOff = new JButton("Släck 1");
-	private JButton btnOff2 = new JButton("Släck 2");
+	private JButton btnOn = new JButton("Tï¿½nd 1");
+	private JButton btnOn2 = new JButton("Tï¿½nd 2");
+	private JButton btnOff = new JButton("Slï¿½ck 1");
+	private JButton btnOff2 = new JButton("Slï¿½ck 2");
 	private Send udpsend;
 	private JPanel panel = new JPanel(new GridLayout(2,2));
 	//private ClientSend client = new ClientSend();
@@ -44,16 +44,18 @@ public class UserGUI extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnOn) {
-			udpsend.send("diod1on");
+//			udpsend.send("diod1on");
+			udpsend.send("1");
 		}
 		if(e.getSource() == btnOn2){
-			udpsend.send("diod2on");
+//			udpsend.send("diod2on");
+			udpsend.send("2");
 		}
 		if(e.getSource() == btnOff){
-			udpsend.send("diod1off");
+//			udpsend.send("diod1off");
 		}
 		if(e.getSource() == btnOff2){
-			udpsend.send("diod2off");
+//			udpsend.send("diod2off");
 		}
 	}
 	
