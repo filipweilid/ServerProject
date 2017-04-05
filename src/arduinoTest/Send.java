@@ -47,11 +47,11 @@ public class Send {
 	}
 
 	public class RecievePackage implements Runnable {
-		byte[] buffer = new byte[15];
-
+		
 		@Override
 		public void run() {
 			while (true) {
+				byte[] buffer = new byte[15];
 				DatagramPacket recPacket = new DatagramPacket(buffer, buffer.length);
 				try {
 					socket.receive(recPacket);
