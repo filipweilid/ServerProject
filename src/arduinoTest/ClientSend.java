@@ -18,7 +18,6 @@ public class ClientSend {
 	}
 
 	public class SendBees implements Runnable {
-
 		public void send() {
 			byte[] beeMass;
 			int massLength;

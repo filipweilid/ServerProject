@@ -8,8 +8,11 @@ import java.net.SocketException;
 
 import javax.swing.*;
 
+import arduinoTest.Send.SendUdpPackage;
+
 public class UserGUI extends JPanel implements ActionListener {
 	private JButton btnSend = new JButton("Skicka");
+	private Send udpsend;
 	//private ClientSend client = new ClientSend();
 	
 	public UserGUI() {
@@ -17,18 +20,22 @@ public class UserGUI extends JPanel implements ActionListener {
 		setPreferredSize(new Dimension(500, 500));
 		add(btnSend, BorderLayout.CENTER);
 		btnSend.addActionListener(this);
+		
+		 try {
+			udpsend = new Send("192.168.0.10", 8888);
+			
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == btnSend) {
-			try {
-				ClientSend.main(null);
-				} catch (SocketException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			udpsend.send();
+			
 		}
 	}
 	
