@@ -44,19 +44,19 @@ public class UserGUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnOn) {
 //			udpsend.send("diod1on");
-			udpsend.send("1");
+			udpsend.send("H2");
 		}
 		if(e.getSource() == btnOn2){
 //			udpsend.send("diod2on");
-			udpsend.send("2");
+			udpsend.send("H3");
 		}
 		if(e.getSource() == btnOff){
 //			udpsend.send("diod1off");
-			udpsend.send("3");
+			udpsend.send("L2");
 		}
 		if(e.getSource() == btnOff2){
 //			udpsend.send("diod2off");
-			udpsend.send("4");
+			udpsend.send("L3");
 		}
 	}
 	
