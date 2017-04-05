@@ -18,7 +18,6 @@ public class UserGUI extends JPanel implements ActionListener {
 	private JButton btnOff2 = new JButton("Släck 2");
 	private Send udpsend;
 	private JPanel panel = new JPanel(new GridLayout(2,2));
-	//private ClientSend client = new ClientSend();
 	
 	public UserGUI() {
 		setLayout(new BorderLayout());
