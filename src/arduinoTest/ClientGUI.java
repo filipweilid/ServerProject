@@ -17,6 +17,8 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import server.ServerController;
+
 public class ClientGUI extends JPanel implements ActionListener {
 	private JPanel panel = new JPanel(new GridLayout(2, 2));
 	private JButton On = new JButton("Sätt på Lampa 1");
@@ -41,17 +43,26 @@ public class ClientGUI extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		SendMessage send = new SendMessage();
+		ServerController server = new ServerController();
 		if (e.getSource() == On) {
 			send.Message("H2");
+			server.logDatabase("Tände lampa 1", send.getHost(), "Kalle");
+			server.setLockStatus("Lampa 1", "Tänd");
 		}
 		if (e.getSource() == On2) {
 			send.Message("H3");
+			server.logDatabase("Tände lampa 2", send.getHost(), "Kalle");
+			server.setLockStatus("Lampa 2", "Tänd");
 		}
 		if (e.getSource() == Off) {
 			send.Message("L2");
+			server.logDatabase("Släckte lampa 1", send.getHost(), "Kalle");
+			server.setLockStatus("Lampa 1", "Släckt");
 		}
 		if (e.getSource() == Off2) {
 			send.Message("L3");
+			server.logDatabase("Släckte lampa 2", send.getHost(), "Kalle");
+			server.setLockStatus("Lampa 2", "Släckt");
 		}
 
 	}

@@ -49,4 +49,8 @@ public class SendMessage {
 			}
 		}	
 	}
+	
+	public String getHost() {
+		return host;
+	}
 }
