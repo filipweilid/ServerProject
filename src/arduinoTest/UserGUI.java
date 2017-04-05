@@ -12,10 +12,10 @@ import javax.swing.*;
 import arduinoTest.Send.SendUdpPackage;
 
 public class UserGUI extends JPanel implements ActionListener {
-	private JButton btnOn = new JButton("T�nd 1");
-	private JButton btnOn2 = new JButton("T�nd 2");
-	private JButton btnOff = new JButton("Sl�ck 1");
-	private JButton btnOff2 = new JButton("Sl�ck 2");
+	private JButton btnOn = new JButton("Tänd 1");
+	private JButton btnOn2 = new JButton("Tänd 2");
+	private JButton btnOff = new JButton("Släck 1");
+	private JButton btnOff2 = new JButton("Släck 2");
 	private Send udpsend;
 	private JPanel panel = new JPanel(new GridLayout(2,2));
 	
