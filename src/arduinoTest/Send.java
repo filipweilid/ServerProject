@@ -12,7 +12,6 @@ public class Send {
 		this.ipAddress = ipAddress;
 		this.port = port;
 		socket = new DatagramSocket();
-		new Thread(new SendUdpPackage()).start();
 		new Thread(new RecievePackage()).start();
 
 	}
@@ -22,7 +21,7 @@ public class Send {
 		SB.send(message);
 	}
 
-	public class SendUdpPackage implements Runnable {
+	public class SendUdpPackage {
 		public void send(String message) {
 			byte[] udpMass;
 			int udpLength;
@@ -39,10 +38,6 @@ public class Send {
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
-		}
-
-		@Override
-		public void run() {
 		}
 	}
 
