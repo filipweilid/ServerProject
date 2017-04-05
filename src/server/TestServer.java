@@ -29,10 +29,10 @@ public class TestServer {
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
 				String[] log = number.split(";");
-				if(log[0] == "log") {
-					controller.logDatabase(log[0], socket.getInetAddress().toString(), log[2]);
-				} else if(log[0] == "status"){
-					controller.logLockStatus(log[0], log[1]);
+				if(log[0].equals("log")) {
+					controller.logDatabase(log[1], socket.getInetAddress().toString(), log[2]);
+				} else if(log[0].equals("status")){
+					controller.logLockStatus(log[1], log[2]);
 				}
 				// Multiplying the number by 2 and forming the return message
 				String returnMessage;
