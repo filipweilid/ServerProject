@@ -3,12 +3,12 @@ package arduinoTest;
 import java.io.IOException;
 import java.net.*;
 
-public class ClientSend {
+public class UDPClientSend {
 	private String ipAddress;
 	private int port;
 	private DatagramSocket socket;
 
-	public ClientSend(String ipAddress, int port) throws SocketException {
+	public UDPClientSend(String ipAddress, int port) throws SocketException {
 		this.ipAddress = ipAddress;
 		this.port = port;
 		socket = new DatagramSocket();
@@ -74,6 +74,6 @@ public class ClientSend {
 
 }
 	public static void main(String[] args) throws SocketException {
-		new ClientSend("192.168.0.10", 8888);
+		new UDPClientSend("192.168.0.10", 8888);
 	}
 }

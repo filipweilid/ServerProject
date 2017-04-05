@@ -4,10 +4,10 @@ package arduinoTest;
 import javax.swing.JFrame;
 
 
-public class UserInterface extends JFrame {
+public class UDPUserInterface extends JFrame {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Client");
-		UserGUI gui = new UserGUI();
+		UDPUserGUI gui = new UDPUserGUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(500, 500);
 		frame.add(gui);

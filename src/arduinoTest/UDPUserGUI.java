@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import arduinoTest.Send.SendUdpPackage;
 
-public class UserGUI extends JPanel implements ActionListener {
+public class UDPUserGUI extends JPanel implements ActionListener {
 	private JButton btnOn = new JButton("Tänd 1");
 	private JButton btnOn2 = new JButton("Tänd 2");
 	private JButton btnOff = new JButton("Släck 1");
@@ -20,7 +20,7 @@ public class UserGUI extends JPanel implements ActionListener {
 	private JPanel panel = new JPanel(new GridLayout(2,2));
 	
 	
-	public UserGUI() {
+	public UDPUserGUI() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(500, 500));
 		add(panel, BorderLayout.CENTER);
