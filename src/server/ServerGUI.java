@@ -33,6 +33,6 @@ public class ServerGUI extends JPanel {
 		frame.add(test);
 		frame.pack();
 		frame.setVisible(true);
-		TestServer server = new TestServer(25000, test);
+//		TestServer server = new TestServer(25000, test);
 	}
 }

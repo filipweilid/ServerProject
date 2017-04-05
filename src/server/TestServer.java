@@ -2,16 +2,19 @@ package server;
 
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class TestServer {
 
 	private static Socket socket;
 	private ServerGUI gui;
-	private Calendar c;
+	private ServerController controller;
 
-	public TestServer(int port, ServerGUI gui) {
-		this.gui = gui;
+	public TestServer(int port, ServerController controller) {
+		this.controller = controller;
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("Server Started and listening to the port 25000");
@@ -25,8 +28,7 @@ public class TestServer {
 				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
 				String number = br.readLine();
-				c = Calendar.getInstance();
-				gui.addlog(number, c, socket.getInetAddress().toString());
+				controller.logDatabase(number, socket.getInetAddress().toString(), null);
 				System.out.println("Message received from client is " + number);
 				// Multiplying the number by 2 and forming the return message
 				String returnMessage;
