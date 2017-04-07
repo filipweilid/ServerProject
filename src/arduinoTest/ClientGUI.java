@@ -44,9 +44,9 @@ public class ClientGUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == On) {
-//			send.changeStatus("H2");
-			send.sendLog("Tände lampa 1", "Kalle");
-			send.sendStatusLog("lampa 1", "tänd");
+			send.changeStatus("H2");
+//			send.sendLog("Tände lampa 1", "Kalle");
+//			send.sendStatusLog("lampa 1", "tänd");
 		}
 		if (e.getSource() == On2) {
 //			send.changeStatus("H3");
