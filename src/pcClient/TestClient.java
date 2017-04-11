@@ -27,6 +27,7 @@ public class TestClient {
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String returnMessage = br.readLine();
+			
 			System.out.println("Message received from the server : " + returnMessage);
 		} catch(Exception e) {
 			e.printStackTrace();

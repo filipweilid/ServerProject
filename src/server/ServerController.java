@@ -57,15 +57,21 @@ public class ServerController {
 	// }
 
 	public void proccesData(String data, Socket socket) {
-		String[] log = data.split(";");
-		if (log[0].equals("log")) {
+		String[] message = data.split(";");
+		if (message[0].equals("log")) {
 			
+			//skriv till databas här
 			
-			sendResponse("Logged action for "+ log[1] + " by: " + socket.getInetAddress().toString(), socket);
-		} else if (log[0].equals("lock")) {
+			sendResponse("Logged action for "+ message[1] + " by: " + socket.getInetAddress().toString(), socket);
+		} else if (message[0].equals("lock")) {
 			
+			//skriv till databas här
 			
-			sendResponse("Lock status changed for :"+  log[1] + "to : "+ log[2], socket);
+			sendResponse("Lock status changed for: "+  message[1] + "to: "+ message[2], socket);
+		}else if(message[0].equals("get")){
+			
+			//hämta från databas
+			sendResponse("Log sent! "+  fetchLog(), socket);
 		}else{
 			sendResponse("Server couldnt process the data", socket);
 		}
@@ -82,7 +88,7 @@ public class ServerController {
 			OutputStreamWriter osw = new OutputStreamWriter(os);
 			BufferedWriter bw = new BufferedWriter(osw);
 			bw.write(message);
-			System.out.println("Message sent to the client is :" + message);
+			System.out.println("Message sent to the client is :"+ "\n" + message);
 			bw.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -94,6 +100,22 @@ public class ServerController {
 			}
 		}
 		
+	}
+	
+	public String fetchLog(){
+//		Document document = new Document("lock1", "på");
+//		Document document2 = new Document("lock1", "av");
+		ArrayList<Document> documents= new ArrayList<Document>();
+		for(int i = 0; i < 100; i++){
+			documents.add(new Document("lock1", i));
+		}
+//		documents.add(document);
+//		documents.add(document2);
+		String returnmessage = "";
+		for(int i = 0; i < documents.size(); i++){
+			returnmessage = returnmessage + documents.get(i).toString() + ":";
+		}
+		return returnmessage;
 	}
 
 
