@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 /**
- * Klassen ClientGUI använder denna klassen för att skika ett meddelande till Arduino
+ * Klassen ClientGUI använder denna klassen för att skicka ett meddelande till Arduino
  * @author Grupp4
  *
  */

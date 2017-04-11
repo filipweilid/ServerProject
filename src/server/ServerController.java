@@ -5,9 +5,22 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.bson.Document;
 import com.mongodb.*;
-import com.mongodb.client.*;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.*;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class ServerController {
 	private MongoClient mongoClient = new MongoClient("35.157.249.193", 27017);
@@ -36,10 +49,14 @@ public class ServerController {
 	}
 	
 	public void logLockStatus(String lock, String status){
-		Document document = new Document("lock", lock)
-				.append("status", status);
+		lockCollection.updateOne(
+                eq("lock", lock),
+                set("status", status));
 		
-		lockCollection.insertOne(document);
+//		Document document = new Document("lock", lock)
+//				.append("status", status);
+//		
+//		lockCollection.insertOne(document);
 	}
 	
 	public static void main(String[] args) {
