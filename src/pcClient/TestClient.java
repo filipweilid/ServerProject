@@ -8,6 +8,11 @@ public class TestClient {
 	private static Socket socket;
 	private String host = "localhost";
 	private int port = 25000;
+	private ClientGUI gui;
+	
+	public TestClient(ClientGUI gui){
+		this.gui = gui;
+	}
 
 	public void sendMessage(String message) {
 		try {
@@ -27,7 +32,15 @@ public class TestClient {
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String returnMessage = br.readLine();
-			
+			if(returnMessage.charAt(0) == 'L'){
+				String text = returnMessage.substring(1);
+				String[] array = text.split(";");
+				String returntext = "";
+				for(int i= 0; i<array.length; i++){
+					returntext = returntext + array[i] + "\n";
+				}
+				gui.addText(returntext);
+			}
 			System.out.println("Message received from the server : " + returnMessage);
 		} catch(Exception e) {
 			e.printStackTrace();

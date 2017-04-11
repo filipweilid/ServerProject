@@ -71,17 +71,21 @@ public class ServerController {
 		}else if(message[0].equals("get")){
 			
 			//hämta från databas
-			sendResponse("Log sent! "+  fetchLog(), socket);
-		}else{
+			sendResponse("L"+  fetchLog(), socket);	
+		}else if(message[0].equals("user")){
+			
+			//hämta från databas här
+			sendResponse("Login is :" + verifyLogin(message[1], message[2]), socket);
+		}
+		
+		else{
 			sendResponse("Server couldnt process the data", socket);
 		}
 	}
 	
-//	public String returnMessage(){
-//		
-//		return
-//	}
-
+	public String verifyLogin(String user, String password)	{
+		return "cant tell atm";
+	}
 	public void sendResponse(String message, Socket socket) {
 		try {
 			OutputStream os = socket.getOutputStream();
@@ -107,13 +111,13 @@ public class ServerController {
 //		Document document2 = new Document("lock1", "av");
 		ArrayList<Document> documents= new ArrayList<Document>();
 		for(int i = 0; i < 100; i++){
-			documents.add(new Document("lock1", i));
+			documents.add(new Document("lock1", i+1));
 		}
 //		documents.add(document);
 //		documents.add(document2);
 		String returnmessage = "";
 		for(int i = 0; i < documents.size(); i++){
-			returnmessage = returnmessage + documents.get(i).toString() + ":";
+			returnmessage = returnmessage + documents.get(i).toString() + ";";
 		}
 		return returnmessage;
 	}
