@@ -17,9 +17,8 @@ public class UDPUserGUI extends JPanel implements ActionListener {
 	private JButton btnOff = new JButton("Släck 1");
 	private JButton btnOff2 = new JButton("Släck 2");
 	private UDPSend udpsend;
-	private JPanel panel = new JPanel(new GridLayout(2,2));
-	
-	
+	private JPanel panel = new JPanel(new GridLayout(2, 2));
+
 	public UDPUserGUI() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(500, 500));
@@ -32,10 +31,10 @@ public class UDPUserGUI extends JPanel implements ActionListener {
 		btnOff.addActionListener(this);
 		btnOn2.addActionListener(this);
 		btnOff2.addActionListener(this);
-		
-		 try {
+
+		try {
 			udpsend = new UDPSend("192.168.0.10", 8888);
-			
+
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -43,23 +42,22 @@ public class UDPUserGUI extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == btnOn) {
-//			udpsend.send("diod1on");
+		if (e.getSource() == btnOn) {
+			// udpsend.send("diod1on");
 			udpsend.send("H2");
 		}
-		if(e.getSource() == btnOn2){
-//			udpsend.send("diod2on");
+		if (e.getSource() == btnOn2) {
+			// udpsend.send("diod2on");
 			udpsend.send("H3");
 		}
-		if(e.getSource() == btnOff){
-//			udpsend.send("diod1off");
+		if (e.getSource() == btnOff) {
+			// udpsend.send("diod1off");
 			udpsend.send("L2");
 		}
-		if(e.getSource() == btnOff2){
-//			udpsend.send("diod2off");
+		if (e.getSource() == btnOff2) {
+			// udpsend.send("diod2off");
 			udpsend.send("L3");
 		}
 	}
-	
-	
+
 }
