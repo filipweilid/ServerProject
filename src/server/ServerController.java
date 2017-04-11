@@ -83,7 +83,7 @@ public class ServerController {
 		} else if (message[0].equals("user")) {
 
 			// hämta från databas här
-			sendResponse("Login is :" + verifyLogin(message[1], message[2]), socket);
+			sendResponse(verifyLogin(message[1], message[2]), socket);
 		}
 
 		else {
