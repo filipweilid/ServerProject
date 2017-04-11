@@ -135,6 +135,10 @@ public class ServerController {
 		}
 		return returnmessage;
 	}
+	
+//	public String getLockstatus(){
+//		
+//	}
 
 	public void logLockStatus(String lock, String status) {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
