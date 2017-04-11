@@ -32,7 +32,7 @@ public class TestClient {
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String returnMessage = br.readLine();
-			if(returnMessage.charAt(0) == 'L'){
+			if(returnMessage.charAt(0) == 'L'){ //vi fick en log tillbaka
 				String text = returnMessage.substring(1);
 				String[] array = text.split(";");
 				String returntext = "";

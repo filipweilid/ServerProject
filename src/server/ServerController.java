@@ -35,6 +35,7 @@ public class ServerController {
 	// private MongoCollection<Document> lockCollection =
 	// database.getCollection("lockStatus");
 	TestServer test;
+	ArrayList<Document> documents= new ArrayList<Document>(); //för tester
 
 	public ServerController() {
 		test = new TestServer(25000, this);
@@ -61,7 +62,7 @@ public class ServerController {
 		if (message[0].equals("log")) {
 			
 			//skriv till databas här
-			
+			addLog(message[1], socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for "+ message[1] + " by: " + socket.getInetAddress().toString(), socket);
 		} else if (message[0].equals("lock")) {
 			
@@ -106,18 +107,22 @@ public class ServerController {
 		
 	}
 	
+	public void addLog(String text, String ip, String username){
+		documents.add(new Document(text, username + " :" + ip));
+	}
+	
 	public String fetchLog(){
 //		Document document = new Document("lock1", "på");
 //		Document document2 = new Document("lock1", "av");
-		ArrayList<Document> documents= new ArrayList<Document>();
-		for(int i = 0; i < 100; i++){
-			documents.add(new Document("lock1", i+1));
-		}
+//		ArrayList<Document> documents= new ArrayList<Document>();
+//		for(int i = 0; i < 100; i++){
+//			documents.add(new Document("lock1", i+1));
+//		}
 //		documents.add(document);
 //		documents.add(document2);
 		String returnmessage = "";
 		for(int i = 0; i < documents.size(); i++){
-			returnmessage = returnmessage + documents.get(i).toString() + ";";
+			returnmessage = returnmessage + documents.get(i).toJson() + ";";
 		}
 		return returnmessage;
 	}
