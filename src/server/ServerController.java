@@ -39,7 +39,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-
 public class ServerController {
 	private MongoClient mongoClient = new MongoClient("83.249.20.194", 27017);
 	private MongoDatabase database = mongoClient.getDatabase("test");
@@ -93,10 +92,10 @@ public class ServerController {
 	}
 
 	public String verifyLogin(String user, String password) {
-		if(userCollection.find(and(eq("Username", user), eq("Username", password))).first() != null) {
+		if (userCollection.find(and(eq("username", user), eq("password", password))).first() != null) {
 			System.out.println("Success");
 			return "OK";
-		}else{
+		} else {
 			return "NOTOK";
 		}
 	}
