@@ -20,7 +20,8 @@ public class ClientController {
 	private int portArduino = 8888;
 	private String hostServer = "localhost";
 	private int portServer = 25000;
-
+	
+	
 	public void changeStatus(String status) {
 		try {
 			InetAddress address = InetAddress.getByName(hostArduino);
@@ -51,7 +52,7 @@ public class ClientController {
 			}
 		}	
 	}
-	
+	//skickas till servern
 	public void sendLog(String text, String username) {
 		try {
 			InetAddress address = InetAddress.getByName(hostServer);
@@ -82,7 +83,7 @@ public class ClientController {
 			}
 		}
 	}
-	
+	//skickas till servern
 	public void sendStatusLog(String lock, String status) {
 		try {
 			InetAddress address = InetAddress.getByName(hostServer);

@@ -45,7 +45,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 		
 		if (e.getSource() == On) {
 //			send.changeStatus("HE"); //H för high och E för 14hex
-			send.sendLog("Tände lampa 1", "Kalle");
+			send.sendLog("Tände lampa 1", "Kalle"); 
 			send.sendStatusLog("lampa 1", "tänd");
 		}
 		if (e.getSource() == On2) {
