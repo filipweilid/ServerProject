@@ -44,24 +44,24 @@ public class ClientGUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == On) {
-			send.changeStatus("HE"); //H för high och E för 14hex
-//			send.sendLog("Tände lampa 1", "Kalle");
-//			send.sendStatusLog("lampa 1", "tänd");
+//			send.changeStatus("HE"); //H för high och E för 14hex
+			send.sendLog("Tände lampa 1", "Kalle");
+			send.sendStatusLog("lampa 1", "tänd");
 		}
 		if (e.getSource() == On2) {
-			send.changeStatus("HC");
-//			send.sendLog("Tände lampa 2", "Kalle");
-//			send.sendStatusLog("lampa 2", "tänd");
+//			send.changeStatus("HC");
+			send.sendLog("Tände lampa 2", "Kalle");
+			send.sendStatusLog("lampa 2", "tänd");
 		}
 		if (e.getSource() == Off) {
-			send.changeStatus("LE");
-//			send.sendLog("Släckte lampa 1", "Kalle");
-//			send.sendStatusLog("lampa 1", "släckt");
+//			send.changeStatus("LE");
+			send.sendLog("Släckte lampa 1", "Kalle");
+			send.sendStatusLog("lampa 1", "släckt");
 		}
 		if (e.getSource() == Off2) {
-			send.changeStatus("LC");
-//			send.sendLog("Släckte lampa 2", "Kalle");
-//			send.sendStatusLog("lampa 2", "släckt");
+//			send.changeStatus("LC");
+			send.sendLog("Släckte lampa 2", "Kalle");
+			send.sendStatusLog("lampa 2", "släckt");
 		}
 
 	}
