@@ -20,10 +20,10 @@ import javax.swing.JPanel;
 
 public class ClientGUI extends JPanel implements ActionListener {
 	private JPanel panel = new JPanel(new GridLayout(2, 2));
-	private JButton On = new JButton("Sätt på Lampa 1");
-	private JButton On2 = new JButton("Sätt på Lampa 2");
-	private JButton Off = new JButton("Släck Lampa 1");
-	private JButton Off2 = new JButton("Släck Lampa 2");
+	private JButton On = new JButton("Öppna");
+	private JButton On2 = new JButton("Tänd Lampa");
+	private JButton Off = new JButton("Lås");
+	private JButton Off2 = new JButton("Släck Lampa");
 	private ClientController send = new ClientController();
 
 	public ClientGUI() {
@@ -42,24 +42,27 @@ public class ClientGUI extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		//Öppnar Låset
 		if (e.getSource() == On) {
-			send.changeStatus("HE"); //H för high och E för 14hex
+			send.changeStatus("1E"); //H för high och E för 14hex
 //			send.sendLog("Tände lampa 1", "Kalle"); 
 //			send.sendStatusLog("lampa 1", "tänd");
 		}
+		//Tänder lampa
 		if (e.getSource() == On2) {
-			send.changeStatus("HC");
+			send.changeStatus("2C");
 //			send.sendLog("Tände lampa 2", "Kalle");
 //			send.sendStatusLog("lampa 2", "tänd");
 		}
+		//Låser låset
 		if (e.getSource() == Off) {
-			send.changeStatus("LE");
+			send.changeStatus("3E");
 //			send.sendLog("Släckte lampa 1", "Kalle");
 //			send.sendStatusLog("lampa 1", "släckt");
 		}
+		//Släcker lampa
 		if (e.getSource() == Off2) {
-			send.changeStatus("LC");
+			send.changeStatus("4C");
 //			send.sendLog("Släckte lampa 2", "Kalle");
 //			send.sendStatusLog("lampa 2", "släckt");
 		}
