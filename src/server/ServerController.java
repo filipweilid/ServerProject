@@ -191,7 +191,7 @@ public class ServerController {
 	 * creates new user
 	 */
 	public String createUser(String username, String password, String role) {
-		if (userCollection.find(eq("username", username)).first() != null) {
+		if (userCollection.find(eq("username", username)).first() == null) {
 			Document document = new Document("username", username).append("password", password).append("role", role);
 			userCollection.insertOne(document);
 			return "OK";
