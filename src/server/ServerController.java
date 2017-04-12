@@ -81,7 +81,8 @@ public class ServerController {
 
 		else if (message[0].equals("create")) {
 			sendResponse(createUser(message[1], message[2], message[3]), socket);
-		} else {
+		}
+		else {
 			sendResponse("Server couldnt process the data", socket);
 		}
 	}

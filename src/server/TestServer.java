@@ -31,33 +31,6 @@ public class TestServer {
 				BufferedReader br = new BufferedReader(isr);
 				String data = br.readLine();
 				controller.proccesData(data, socket); //serverControllern hanterar datan
-				
-//				String[] log = number.split(";");
-//				if(log[0].equals("log")) {
-//					controller.logDatabase(log[1], socket.getInetAddress().toString(), log[2]);
-//				} else if(log[0].equals("status")){
-//					controller.logLockStatus(log[1], log[2]);
-//				}
-				// Multiplying the number by 2 and forming the return message
-//				String returnMessage;
-//				try {
-//					int numberInIntFormat = Integer.parseInt(number);
-//					int returnValue = numberInIntFormat * 2;
-//					returnMessage = String.valueOf(returnValue) + "\n";
-//					
-//				} catch (NumberFormatException e) {
-//					// Input was not a number. Sending proper message back to
-//					// client.
-//					returnMessage = "Please send a proper number\n";
-//				}
-				
-				// Sending the response back to the client.
-//				OutputStream os = socket.getOutputStream();
-//				OutputStreamWriter osw = new OutputStreamWriter(os);
-//				BufferedWriter bw = new BufferedWriter(osw);
-//				bw.write(returnMessage);
-//				System.out.println("Message sent to the client is " + returnMessage);
-//				bw.flush();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
