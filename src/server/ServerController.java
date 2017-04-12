@@ -51,17 +51,6 @@ public class ServerController {
 		test = new TestServer(25000, this);
 	}
 
-	public void logDatabase(String text, String ip, String username) {
-		TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
-		Calendar c = Calendar.getInstance(timeZone);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-		simpleDateFormat.setTimeZone(timeZone);
-		Document document = new Document("username", username).append("date", simpleDateFormat.format(c.getTime()))
-				.append("ip", ip).append("message", text);
-
-		logCollection.insertOne(document);
-	}
-
 	public void proccesData(String data, Socket socket) {
 		String[] message = data.split(";");
 		if (message[0].equals("log")) {
@@ -85,21 +74,22 @@ public class ServerController {
 			// hämta från databas här
 			sendResponse(verifyLogin(message[1], message[2]), socket);
 		}
-
+		
+		else if(message[0].equals("status")){
+			sendResponse(getLockStatus(message[1]), socket);
+		}
+		
+		else if(message[0].equals("create")){
+			createUser(message[1], message[2], message[3]);
+			sendResponse("User created", socket);
+		}
 		else {
 			sendResponse("Server couldnt process the data", socket);
 		}
 	}
-
-	public String verifyLogin(String user, String password) {
-		if (userCollection.find(and(eq("username", user), eq("password", password))).first() != null) {
-			System.out.println("Success");
-			return "OK";
-		} else {
-			return "NOTOK";
-		}
-	}
-
+	/*
+	 * Sends a response
+	 */
 	public void sendResponse(String message, Socket socket) {
 		try {
 			OutputStream os = socket.getOutputStream();
@@ -119,32 +109,109 @@ public class ServerController {
 		}
 
 	}
-
-	// public void addLog(String text, String ip, String username){
-	// documents.add(new Document(text, username + " :" + ip));
-	// }
-
+	/*
+	 * loggar data till servern
+	 */
+	public void logDatabase(String text, String ip, String username) {
+		TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
+		Calendar c = Calendar.getInstance(timeZone);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+		simpleDateFormat.setTimeZone(timeZone);
+		Document document = new Document("username", username).append("date", simpleDateFormat.format(c.getTime()))
+				.append("ip", ip).append("message", text);
+		logCollection.insertOne(document);
+	}
+	
+	/*
+	 * Fetches and returns the log as a string
+	 */
 	public String fetchLog() {
-		Iterator iter = logCollection.find().iterator();
+		Iterator<Document> iter = logCollection.find().iterator();
 		String returnmessage = "";
 		// for(int i = 0; i < documents.size(); i++){
 		// returnmessage = returnmessage + documents.get(i).toJson() + ";";
 		// }
 		while (iter.hasNext()) {
-			returnmessage = returnmessage + iter.next().toString() + ";";
+			Document document = iter.next();
+			String info = document.getString("username")+ ": "+ document.getString("message")+ ": från:"+ document.get("ip") + " :" + document.get("date");
+			returnmessage = returnmessage + info + ";";
+			
 		}
 		return returnmessage;
 	}
 	
-//	public String getLockstatus(){
-//		
-//	}
-
+	/*
+	 * Fetches log for a specific user
+	 */
+	public String fetchLogForUser(String username) {
+		Iterator<Document> iter = logCollection.find(eq("username", username)).iterator();
+		String returnmessage = "";
+		// for(int i = 0; i < documents.size(); i++){
+		// returnmessage = returnmessage + documents.get(i).toJson() + ";";
+		// }
+		while (iter.hasNext()) {
+			Document document = iter.next();
+			String info = document.getString("username")+ ": "+ document.getString("message")+ ": från:"+ document.get("ip") + " :" + document.get("date");
+			returnmessage = returnmessage + info + ";";
+		}
+		return returnmessage;
+	}
+	/*
+	 * checks with database if username and password is correct
+	 */
+	public String verifyLogin(String user, String password) {
+		if (userCollection.find(and(eq("username", user), eq("password", password))).first() != null) {
+			System.out.println("Success");
+			return "OK;"+ userCollection.find(eq("username", user)).first().getString("role");
+		} else {
+			return "NOTOK";
+		}
+	}
+	/*
+	 * Changes the status of lock
+	 */
 	public void logLockStatus(String lock, String status) {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
-		Document document = new Document("lock", lock).append("status", status);
+	}
+	
+	/*
+	 * Retrieves the lockstatus of a certain lock
+	 */
+	public String getLockStatus(String lock){
+		return lockCollection.find(eq("lock", lock)).first().getString("status");
+	}
+	
+	
+	//***____________________ADMIN--METODER_______________***//
+	
+	/*
+	 * creates new user
+	 */
+	public void createUser(String username, String password, String role){
+		Document document = new Document("username", username ).append("password", password).append("role", role);
+		userCollection.insertOne(document);
+	}
+	/*
+	 * removes a user
+	 */
+	public void removeUser(String username){
+		userCollection.findOneAndDelete((eq("username", username)));
+	}
+	/*
+	 * adds a lock
+	 */
+	public void addLock(String lock){
+		Document document = new Document("lock", lock).append("status", "open");
 		lockCollection.insertOne(document);
 	}
+	/*
+	 * removes a lock
+	 */
+	public void removeLock(String lock){
+		lockCollection.findOneAndDelete(eq("lock", lock));
+	}
+	
+	//***_______________________________________________***//
 
 	public static void main(String[] args) {
 		new ServerController();

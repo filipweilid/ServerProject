@@ -2,6 +2,7 @@ package pcClient;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,13 +14,15 @@ public class ClientGUI extends JPanel implements ActionListener {
 	private JTextField tfText = new JTextField();
 	private TestClient client = new TestClient(this);
 	private TextArea textarea = new TextArea();
+	private JPanel panel1 = new JPanel(new GridLayout(2,1)	);
 	
 	public ClientGUI() {
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(500, 500));
-		add(btnSend, BorderLayout.SOUTH);
-		add(tfText, BorderLayout.CENTER);
-		add(textarea, BorderLayout.EAST);
+		setPreferredSize(new Dimension(700, 500));
+		add(panel1, BorderLayout.SOUTH);
+		panel1.add(tfText);
+		panel1.add(btnSend);
+		add(textarea, BorderLayout.CENTER);
 		btnSend.addActionListener(this);
 	}
 	
