@@ -76,7 +76,7 @@ public class ServerController {
 		}
 
 		else if (message[0].equals("status")) {
-			sendResponse(getLockStatus(message[1]), socket);
+			sendResponse(getLockStatus(), socket);
 		}
 
 		else if (message[0].equals("create")) {
@@ -187,8 +187,8 @@ public class ServerController {
 	/*
 	 * Retrieves the lockstatus of a certain lock
 	 */
-	public String getLockStatus(String lock) {
-		return lockCollection.find(eq("lock", lock)).first().getString("status");
+	public String getLockStatus() {
+		return lockCollection.find(eq("lock", "lock")).first().getString("status");
 	}
 
 	// ***____________________ADMIN--METODER_______________***//
@@ -211,7 +211,9 @@ public class ServerController {
 	public void removeUser(String username) {
 		userCollection.findOneAndDelete((eq("username", username)));
 	}
-
+	/*
+	 * 
+	 */
 	public String getUsers(){
 		Iterator<Document> iter = userCollection.find().iterator();
 		String returnmessage = "";
