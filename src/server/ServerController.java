@@ -69,9 +69,7 @@ public class ServerController {
 
 			// hämta från databas
 			sendResponse("L" + fetchLog(), socket);
-		} else if (true) {
-
-		}
+		} 
 
 		else if (message[0].equals("login")) {
 
