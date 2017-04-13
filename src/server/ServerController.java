@@ -85,7 +85,7 @@ public class ServerController {
 		
 		else if(message[0].equals("users")){
 			
-			sendResponse("hej", socket);
+			sendResponse(getUsers(), socket);
 		}
 		else {
 			sendResponse("Server couldnt process the data", socket);
@@ -212,13 +212,14 @@ public class ServerController {
 		userCollection.findOneAndDelete((eq("username", username)));
 	}
 
-	public void getUsers(){
-		
+	public String getUsers(){
 		Iterator<Document> iter = userCollection.find().iterator();
+		String returnmessage = "";
 		while(iter.hasNext()){
 			Document document = iter.next();
-			
+			returnmessage = returnmessage + document.getString("username")+ ";"+ document.getString("role")+ ";";
 		}
+		return returnmessage;
 	}
 
 	// ***_______________________________________________***//
