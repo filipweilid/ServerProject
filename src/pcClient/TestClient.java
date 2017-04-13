@@ -32,15 +32,6 @@ public class TestClient {
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String returnMessage = br.readLine();
-//			if(returnMessage.charAt(0) == 'L'){ //vi fick en log tillbaka
-//				String text = returnMessage.substring(1);
-//				String[] array = text.split(";");
-//				String returntext = "";
-//				for(int i= 0; i<array.length; i++){
-//					returntext = returntext + array[i] + "\n";
-//				}
-//				gui.addText(returntext);
-//			}
 			gui.addText(returnMessage);
 			System.out.println("Message received from the server : " + returnMessage);
 		} catch(Exception e) {
