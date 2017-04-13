@@ -51,7 +51,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		//Öppnar Låset
 		if (e.getSource() == On) {
-			send.changeStatus("1E"); //H för high och E för 14hex
+			send.changeStatus("1"); //H för high och E för 14hex
 			lblStatus1.setText("Status = Open");
 //			send.sendLog("Tände lampa 1", "Kalle"); 
 //			send.sendStatusLog("lampa 1", "tänd");
@@ -65,7 +65,7 @@ public class ClientGUI extends JPanel implements ActionListener {
 		}
 		//Låser låset
 		if (e.getSource() == Off) {
-			send.changeStatus("3E");
+			send.changeStatus("2");
 			lblStatus1.setText("Status = Locked");
 //			send.sendLog("Släckte lampa 1", "Kalle");
 //			send.sendStatusLog("lampa 1", "släckt");
