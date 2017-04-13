@@ -69,7 +69,7 @@ public class ServerController {
 
 			// hämta från databas
 			sendResponse("L" + fetchLog(), socket);
-		} else if (message[0].equals("user")) {
+		} else if (message[0].equals("login")) {
 
 			// hämta från databas här
 			sendResponse(verifyLogin(message[1], message[2]), socket);
@@ -81,6 +81,11 @@ public class ServerController {
 
 		else if (message[0].equals("create")) {
 			sendResponse(createUser(message[1], message[2], message[3]), socket);
+		}
+		
+		else if(message[0].equals("users")){
+			
+			sendResponse("hej", socket);
 		}
 		else {
 			sendResponse("Server couldnt process the data", socket);
@@ -207,19 +212,13 @@ public class ServerController {
 		userCollection.findOneAndDelete((eq("username", username)));
 	}
 
-	/*
-	 * adds a lock
-	 */
-	public void addLock(String lock) {
-		Document document = new Document("lock", lock).append("status", "open");
-		lockCollection.insertOne(document);
-	}
-
-	/*
-	 * removes a lock
-	 */
-	public void removeLock(String lock) {
-		lockCollection.findOneAndDelete(eq("lock", lock));
+	public void getUsers(){
+		
+		Iterator<Document> iter = userCollection.find().iterator();
+		while(iter.hasNext()){
+			Document document = iter.next();
+			
+		}
 	}
 
 	// ***_______________________________________________***//
