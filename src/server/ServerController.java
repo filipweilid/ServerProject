@@ -137,8 +137,8 @@ public class ServerController {
 		String returnmessage = "";
 		while (iter.hasNext()) {
 			Document document = iter.next();
-			String info = document.getString("username") + ": " + document.getString("message") + ": från:"
-					+ document.get("ip") + " :" + document.get("date");
+			String info = document.get("date") + ";" + document.getString("message") + ";"
+					+ document.getString("username") + ";" + document.get("ip");
 			returnmessage = returnmessage + info + ";";
 
 		}
