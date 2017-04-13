@@ -69,7 +69,11 @@ public class ServerController {
 
 			// hämta från databas
 			sendResponse("L" + fetchLog(), socket);
-		} else if (message[0].equals("login")) {
+		} else if (true) {
+
+		}
+
+		else if (message[0].equals("login")) {
 
 			// hämta från databas här
 			sendResponse(verifyLogin(message[1], message[2]), socket);
@@ -82,12 +86,11 @@ public class ServerController {
 		else if (message[0].equals("create")) {
 			sendResponse(createUser(message[1], message[2], message[3]), socket);
 		}
-		
-		else if(message[0].equals("users")){
-			
+
+		else if (message[0].equals("users")) {
+
 			sendResponse(getUsers(), socket);
-		}
-		else {
+		} else {
 			sendResponse("Server couldnt process the data", socket);
 		}
 	}
@@ -134,9 +137,6 @@ public class ServerController {
 	public String fetchLog() {
 		Iterator<Document> iter = logCollection.find().iterator();
 		String returnmessage = "";
-		// for(int i = 0; i < documents.size(); i++){
-		// returnmessage = returnmessage + documents.get(i).toJson() + ";";
-		// }
 		while (iter.hasNext()) {
 			Document document = iter.next();
 			String info = document.getString("username") + ": " + document.getString("message") + ": från:"
@@ -158,8 +158,8 @@ public class ServerController {
 		// }
 		while (iter.hasNext()) {
 			Document document = iter.next();
-			String info = document.getString("username") + ": " + document.getString("message") + ": från:"
-					+ document.get("ip") + " :" + document.get("date");
+			String info = document.get("date") + ";" + document.getString("message") + ";"
+					+ document.getString("username") + ";" + document.get("ip");
 			returnmessage = returnmessage + info + ";";
 		}
 		return returnmessage;
@@ -211,15 +211,16 @@ public class ServerController {
 	public void removeUser(String username) {
 		userCollection.findOneAndDelete((eq("username", username)));
 	}
+
 	/*
 	 * 
 	 */
-	public String getUsers(){
+	public String getUsers() {
 		Iterator<Document> iter = userCollection.find().iterator();
 		String returnmessage = "";
-		while(iter.hasNext()){
+		while (iter.hasNext()) {
 			Document document = iter.next();
-			returnmessage = returnmessage + document.getString("username")+ ";"+ document.getString("role")+ ";";
+			returnmessage = returnmessage + document.getString("username") + ";" + document.getString("role") + ";";
 		}
 		return returnmessage;
 	}
