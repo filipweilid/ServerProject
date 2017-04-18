@@ -45,10 +45,10 @@ public class ServerController {
 	private MongoCollection<Document> logCollection = database.getCollection("log");
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
 	private MongoCollection<Document> userCollection = database.getCollection("users");
-	TestServer test;
+	ServerConnectivity test;
 
 	public ServerController() {
-		test = new TestServer(25000, this);
+		test = new ServerConnectivity(25000, this);
 	}
 
 	public void proccesData(String data, Socket socket) {

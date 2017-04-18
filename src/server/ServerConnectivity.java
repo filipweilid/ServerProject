@@ -10,13 +10,13 @@ import java.util.TimeZone;
 
 //SERVERN SOM LYSSNAR PÅ INKOMMANDE TRAFIK OCH ANVÄNDER SERVERCONTROLLER FÖR 
 //ATT VETA VAD SOM SKA SKE
-public class TestServer {
+public class ServerConnectivity {
 
 	private Socket socket;
 	private ServerGUI gui;
 	private ServerController controller;
 
-	public TestServer(int port, ServerController controller) {
+	public ServerConnectivity(int port, ServerController controller) {
 		this.controller = controller;
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
