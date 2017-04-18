@@ -5,39 +5,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.sql.DatabaseMetaData;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.ServerAddress;
-
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
-
 import org.bson.Document;
-import java.util.Arrays;
-import com.mongodb.Block;
-
-import com.mongodb.client.MongoCursor;
 import static com.mongodb.client.model.Filters.*;
-import com.mongodb.client.result.DeleteResult;
 import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.*;
 
 public class ServerController {
 	private MongoClient mongoClient = new MongoClient("83.249.20.194", 27017);
@@ -48,7 +26,7 @@ public class ServerController {
 	ServerConnectivity test;
 
 	public ServerController() {
-		test = new ServerConnectivity(25000, this);
+		this.test = new ServerConnectivity(25000, this);
 	}
 
 	public void proccesData(String data, Socket socket) {
@@ -136,7 +114,6 @@ public class ServerController {
 			String info = document.get("date") + ";" + document.getString("message") + ";"
 					+ document.getString("username") + ";" + document.get("ip");
 			returnmessage = returnmessage + info + ";";
-
 		}
 		return returnmessage;
 	}
@@ -167,7 +144,7 @@ public class ServerController {
 			return "NOTOK";
 		}
 	}
-
+	
 	/*
 	 * Changes the status of lock
 	 */

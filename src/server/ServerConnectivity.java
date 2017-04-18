@@ -6,7 +6,6 @@ import java.net.*;
 //SERVERN SOM LYSSNAR PÅ INKOMMANDE TRAFIK OCH ANVÄNDER SERVERCONTROLLER FÖR 
 //ATT VETA VAD SOM SKA SKE
 public class ServerConnectivity {
-
 	private Socket socket;
 	// private ServerGUI gui;
 	private ServerController controller;
@@ -35,7 +34,7 @@ public class ServerConnectivity {
 				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
 				String data = br.readLine();
-				controller.proccesData(data, socket); // serverControllern
+				controller.proccesData(data, socket); 	// serverControllern
 														// hanterar datan
 			}
 		} catch (Exception e) {
