@@ -2,16 +2,12 @@ package server;
 
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 
 //SERVERN SOM LYSSNAR PÅ INKOMMANDE TRAFIK OCH ANVÄNDER SERVERCONTROLLER FÖR 
 //ATT VETA VAD SOM SKA SKE
 public class ServerConnectivity {
-
+	
 	private Socket socket;
 	//private ServerGUI gui;
 	private ServerController controller;

@@ -103,7 +103,6 @@ public class ServerController {
 			System.out.println("Message sent to the client is :" + "\n" + message);
 			bw.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
@@ -148,9 +147,6 @@ public class ServerController {
 	public String fetchLogForUser(String username) {
 		Iterator<Document> iter = logCollection.find(eq("username", username)).iterator();
 		String returnmessage = "";
-		// for(int i = 0; i < documents.size(); i++){
-		// returnmessage = returnmessage + documents.get(i).toJson() + ";";
-		// }
 		while (iter.hasNext()) {
 			Document document = iter.next();
 			String info = document.get("date") + ";" + document.getString("message") + ";"
@@ -208,7 +204,7 @@ public class ServerController {
 	}
 
 	/*
-	 * 
+	 * Retrieves a user
 	 */
 	public String getUsers() {
 		Iterator<Document> iter = userCollection.find().iterator();
