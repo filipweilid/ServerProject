@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
@@ -156,7 +157,14 @@ public class ServerController {
 	 * Retrieves the lockstatus of a certain lock
 	 */
 	public String getLockStatus() {
-		return lockCollection.find(eq("lock", "lock")).first().getString("status");
+		//return lockCollection.find(eq("lock", "lock")).first().getString("status");
+		Iterator<Document> iter = lockCollection.find().iterator();
+		String returnmessage = "";
+		while (iter.hasNext()) {
+			Document document = iter.next();
+			returnmessage = returnmessage + document.getString("lock")+ ";" + document.getString("status")+";";
+		}
+		return returnmessage;
 	}
 
 	// ***____________________ADMIN--METODER_______________***//

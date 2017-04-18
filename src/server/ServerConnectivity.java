@@ -24,8 +24,8 @@ public class ServerConnectivity {
 	 */
 	public void getConnection() {
 		try {
-			ServerSocket serverSocket = new ServerSocket(port);
 			// Server is running always. This is done using this while(true)
+			ServerSocket serverSocket = new ServerSocket(port);
 			// loop
 			while (true) {
 				// Reading the message from the client
