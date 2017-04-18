@@ -54,7 +54,6 @@ public class ServerController {
 	public void proccesData(String data, Socket socket) {
 		String[] message = data.split(";");
 		if (message[0].equals("log")) {
-
 			// skriv till databas här
 			logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			// addLog(message[1], socket.getInetAddress().toString(),
@@ -67,12 +66,11 @@ public class ServerController {
 			sendResponse("Lock status changed for: " + message[1] + "to: " + message[2], socket);
 		} else if (message[0].equals("get")) {
 
-			// hämta från databas
+			// hämta från databas och skickar
 			sendResponse(fetchLog(), socket);
 		} 
 
 		else if (message[0].equals("login")) {
-
 			// hämta från databas här
 			sendResponse(verifyLogin(message[1], message[2]), socket);
 		}
@@ -80,21 +78,21 @@ public class ServerController {
 		else if (message[0].equals("status")) {
 			sendResponse(getLockStatus(), socket);
 		}
-
+		
 		else if (message[0].equals("create")) {
 			sendResponse(createUser(message[1], message[2], message[3]), socket);
 		}
-
+		
 		else if (message[0].equals("users")) {
-
 			sendResponse(getUsers(), socket);
+			
 		} else {
 			sendResponse("Server couldnt process the data", socket);
 		}
 	}
 
 	/*
-	 * Sends a response
+	 * Creates and sends a response
 	 */
 	public void sendResponse(String message, Socket socket) {
 		try {
@@ -113,7 +111,6 @@ public class ServerController {
 			} catch (Exception e) {
 			}
 		}
-
 	}
 
 	/*

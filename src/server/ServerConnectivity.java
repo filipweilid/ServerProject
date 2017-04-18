@@ -13,7 +13,7 @@ import java.util.TimeZone;
 public class ServerConnectivity {
 
 	private Socket socket;
-	private ServerGUI gui;
+	//private ServerGUI gui;
 	private ServerController controller;
 
 	public ServerConnectivity(int port, ServerController controller) {
