@@ -27,7 +27,7 @@ public class ServerController {
 	ServerConnectivity test;
 
 	public ServerController() {
-		this.test = new ServerConnectivity(25000, this);
+		this.test = new ServerConnectivity(25000, 25001, this);
 	}
 
 	public void proccesData(String data, Socket socket) {

@@ -22,7 +22,7 @@ public class TestClient {
 		try {
 			InetAddress address = InetAddress.getByName(host);
 			socket = ((SSLSocketFactory)SSLSocketFactory.getDefault()).createSocket(address, port);
-			//socket = new SSLSocket(address, port);
+			//socket = new Socket(address, port);
 			// Send the message to the server
 			OutputStream os = socket.getOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(os);
