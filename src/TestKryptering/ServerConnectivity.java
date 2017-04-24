@@ -23,27 +23,27 @@ public class ServerConnectivity {
 	}
 
 	/*
-	 * Method that listens to the serversocket and executes the action
+	 * Connection for Andriod client, uses SSLserversockets
 	 */
 	private class SSLConnection implements Runnable {
 		private SSLSocket socket;
 		private int port;
-
+		
 		public SSLConnection(int port) {
 			this.port = port;
 		}
 		public void run() {
 			try {
-				// Server is running always. This is done using this while(true)
+				//Creates a serversocket from the factory with default alogrithm settings
 				ServerSocket serversocket = ((SSLServerSocketFactory) SSLServerSocketFactory.getDefault())
 						.createServerSocket(port);
-				// loop
 				while (true) {
-					// Reading the message from the client
 					System.out.println("lyssnar på port" + port);
 					socket = (SSLSocket) serversocket.accept();
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 					try {
+						//reads the inputstream
+						//throws exception if client isnt trusted
 						String data = br.readLine();
 						controller.proccesData(data, socket);
 					} catch (Exception e) {
@@ -55,10 +55,11 @@ public class ServerConnectivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			System.out.println("test");
 		}
 	}
-
+	/*
+	 * Connection for Arduino
+	 */
 	private class ArduinoConnection implements Runnable {
 		private Socket socket;
 		private int port;
@@ -69,11 +70,8 @@ public class ServerConnectivity {
 
 		public void run() {
 			try {
-				// Server is running always. This is done using this while(true)
 				ServerSocket serversocket = new ServerSocket(port);
-				// loop
 				while (true) {
-					// Reading the message from the client
 					System.out.println("lyssnar på port" + port);
 					socket = serversocket.accept();
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
