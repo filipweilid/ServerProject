@@ -19,11 +19,11 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class ServerController {
-	private MongoClient mongoClient = new MongoClient("83.249.20.194", 27017);
-	private MongoDatabase database = mongoClient.getDatabase("test");
-	private MongoCollection<Document> logCollection = database.getCollection("log");
-	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-	private MongoCollection<Document> userCollection = database.getCollection("users");
+//	private MongoClient mongoClient = new MongoClient("83.249.20.194", 27017);
+//	private MongoDatabase database = mongoClient.getDatabase("test");
+//	private MongoCollection<Document> logCollection = database.getCollection("log");
+//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
+//	private MongoCollection<Document> userCollection = database.getCollection("users");
 	ServerConnectivity test;
 
 	public ServerController() {
@@ -204,6 +204,8 @@ public class ServerController {
 	// ***_______________________________________________***//
 
 	public static void main(String[] args) {
+		System.setProperty("javax.net.ssl.keyStore", "hej");
+		System.setProperty("javax.net.ssl.keyStorePassword","adalock"); 
 		new ServerController();
 	}
 }

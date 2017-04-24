@@ -8,24 +8,20 @@ import javax.net.ssl.SSLSocketFactory;
 
 public class TestClient {
 
-	private static SSLSocket socket;
+	private static Socket socket;
 	private String host = "localhost";
 	private int port = 25000;
 	private ClientGUI gui;
 	
 	public TestClient(ClientGUI gui){
 		this.gui = gui;
-		System.setProperty("javax.net.ssl.trustStore", "./keystore");
-	    System.setProperty("javax.net.ssl.trustStorePassword", "nopassword");
+		
 	}
 
 	public void sendMessage(String message) {
 		try {
 			InetAddress address = InetAddress.getByName(host);
-			SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			socket = (SSLSocket) socketFactory.createSocket(address, port);
-			socket.setEnabledProtocols(new String[] {"TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"});
-			socket.setEnabledCipherSuites(socket.getEnabledCipherSuites());
+			socket = ((SSLSocketFactory)SSLSocketFactory.getDefault()).createSocket(address, port);
 			//socket = new SSLSocket(address, port);
 			// Send the message to the server
 			OutputStream os = socket.getOutputStream();

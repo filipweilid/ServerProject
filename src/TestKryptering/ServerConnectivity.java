@@ -21,9 +21,6 @@ public class ServerConnectivity {
 		this.controller = controller;
 		System.out.println("Server Started and listening to the port 25000");
 		getConnection();
-		System.setProperty("javax.net.ssl.keyStore", "./keystore");
-	    System.setProperty("javax.net.ssl.keyStorePassword", "nopassword");
-	    java.lang.System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
 	}
 	
 	
@@ -33,11 +30,7 @@ public class ServerConnectivity {
 	public void getConnection() {
 		try {
 			// Server is running always. This is done using this while(true)
-			SSLServerSocketFactory serverFactory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-			SSLServerSocket serversocket = (SSLServerSocket) serverFactory.createServerSocket(port);
-			serversocket.setEnabledProtocols(new String[] {"TLSv1", "TLSv1.1", "TLSv1.2", "SSLv3"});
-			serversocket.setEnabledCipherSuites(serversocket.getEnabledCipherSuites());
-			
+			ServerSocket serversocket = ((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).createServerSocket(25000);
 			
 			// loop
 			while (true) {
@@ -46,8 +39,13 @@ public class ServerConnectivity {
 				InputStream is = socket.getInputStream();
 				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
-				String data = br.readLine();
-				controller.proccesData(data, socket); 	// serverControllern
+				try{
+					String data = br.readLine();
+					controller.proccesData(data, socket);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+//				controller.proccesData(data, socket); 	// serverControllern
 														// hanterar datan
 			}
 		} catch (Exception e) {

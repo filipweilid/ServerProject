@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 public class StartClient extends JFrame {
 	public static void main(String[] args) {
+		System.setProperty("javax.net.ssl.trustStore", "hej");
 		JFrame frame = new JFrame("Client");
 		ClientGUI gui = new ClientGUI();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
