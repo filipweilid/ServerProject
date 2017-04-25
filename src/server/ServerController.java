@@ -19,7 +19,7 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class ServerController {
-	private MongoClient mongoClient = new MongoClient("83.249.20.194", 27017);
+	private MongoClient mongoClient = new MongoClient("localhost", 27017);
 	private MongoDatabase database = mongoClient.getDatabase("test");
 	private MongoCollection<Document> logCollection = database.getCollection("log");
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
@@ -60,6 +60,10 @@ public class ServerController {
 		
 		else if (message[0].equals("create")) {
 			sendResponse(createUser(message[1], message[2], message[3]), socket);
+		}
+		
+		else if (message[0].equals("delete")) {
+			sendResponse(removeUser(message[1]), socket);
 		}
 		
 		else if (message[0].equals("users")) {
@@ -182,10 +186,11 @@ public class ServerController {
 	}
 
 	/*
-	 * removes a user
+	 * removes a user FIXA DENNA METODEN
 	 */
-	public void removeUser(String username) {
+	public String removeUser(String username) {
 		userCollection.findOneAndDelete((eq("username", username)));
+		return "OK";
 	}
 
 	/*
