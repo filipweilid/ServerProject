@@ -95,18 +95,15 @@ public class ServerController {
 		String commando = message[0];
 		switch (commando) {
 		case "log": 
-			
 			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
-			
 			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
 			mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
 			break;
 		case "scan":
-			
 			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
 			mongodb.addLock(responseMessage);
 			sendResponse(responseMessage, socket);			

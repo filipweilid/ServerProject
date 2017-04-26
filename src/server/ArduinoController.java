@@ -18,7 +18,7 @@ import java.net.Socket;
 public class ArduinoController {
 	private MongoDBController mongodb = new MongoDBController();
 	private Socket socket;
-	private String returnMessage = null;
+	private String returnMessage;
 	
 	public String sendRequest(String internalIP, String command){
 		try {
