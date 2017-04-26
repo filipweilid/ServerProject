@@ -189,8 +189,10 @@ public class ServerController {
 	 * removes a user FIXA DENNA METODEN
 	 */
 	public String removeUser(String username) {
-		userCollection.findOneAndDelete((eq("username", username)));
-		return "OK";
+		if(userCollection.findOneAndDelete((eq("username", username)))!= null){
+			return "OK";
+		}
+		return "NOTOK";
 	}
 
 	/*
