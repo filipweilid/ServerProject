@@ -70,10 +70,8 @@ public class UDPClientSend {
 	
 
 	}
-		
-
 }
 	public static void main(String[] args) throws SocketException {
-		new UDPClientSend("192.168.0.10", 8888);
+		new UDPClientSend("255.255.255.255", 8888);
 	}
 }
