@@ -34,7 +34,7 @@ public class ServerConnectivity {
 				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 				BufferedReader br = new BufferedReader(isr);
 				String data = br.readLine();
-				controller.proccesData(data, socket); 	// serverControllern
+				controller.processData(data, socket); 	// serverControllern
 														// hanterar datan
 			}
 		} catch (Exception e) {

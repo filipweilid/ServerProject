@@ -19,39 +19,51 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class ServerController {
-//	private MongoClient mongoClient = new MongoClient("localhost", 27017);
-//	private MongoDatabase database = mongoClient.getDatabase("test");
-//	private MongoCollection<Document> logCollection = database.getCollection("log");
-//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-//	private MongoCollection<Document> userCollection = database.getCollection("users");
-	ServerConnectivity test;
-	ArduinoController arduinocontroller = new ArduinoController();
-	MongoDBController mongodb= new MongoDBController();
+	// private MongoClient mongoClient = new MongoClient("localhost", 27017);
+	// private MongoDatabase database = mongoClient.getDatabase("test");
+	// private MongoCollection<Document> logCollection =
+	// database.getCollection("log");
+	// private MongoCollection<Document> lockCollection =
+	// database.getCollection("lockStatus");
+	// private MongoCollection<Document> userCollection =
+	// database.getCollection("users");
+	private ServerConnectivity test;
+	private ArduinoController arduinocontroller = new ArduinoController();
+	private MongoDBController mongodb = new MongoDBController();
+	private String responseMessage;
+	private String[] message;
 
 	public ServerController() {
 		this.test = new ServerConnectivity(25000, this);
 	}
 
 	public void proccesData(String data, Socket socket) {
-		String[] message = data.split(";");
+		message = data.split(";");
+
 		if (message[0].equals("log")) {
 			// skriv till databas här
-			
 			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			// addLog(message[1], socket.getInetAddress().toString(),
 			// message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 		} else if (message[0].equals("lock")) {
-			
-			arduinocontroller.sendRequest(, );
+
+			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
 			// skriv till databas här
 			mongodb.logLockStatus(message[1], message[2]);
-			sendResponse("Lock status changed for: " + message[1] + "to: " + message[2], socket);
-		} else if (message[0].equals("get")) {
+			sendResponse(responseMessage, socket);
+
+		} else if (message[0].equals("scan")) {
+			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
+			mongodb.addLock(responseMessage);
+			sendResponse(responseMessage, socket);
+		}
+
+		else if (message[0].equals("get")) {
 
 			// hämta från databas och skickar
 			sendResponse(mongodb.fetchLog(), socket);
-		} 
+		}
 
 		else if (message[0].equals("login")) {
 			// hämta från databas här
@@ -61,20 +73,65 @@ public class ServerController {
 		else if (message[0].equals("status")) {
 			sendResponse(mongodb.getLockStatus(), socket);
 		}
-		
+
 		else if (message[0].equals("create")) {
 			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
 		}
-		
+
 		else if (message[0].equals("delete")) {
 			sendResponse(mongodb.removeUser(message[1]), socket);
 		}
-		
+
 		else if (message[0].equals("users")) {
 			sendResponse(mongodb.getUsers(), socket);
-			
+
 		} else {
 			sendResponse("Server couldnt process the data", socket);
+		}
+	}
+
+	public void processData(String data, Socket socket) {
+		message = data.split(";");
+		String commando = message[0];
+		switch (commando) {
+		case "log": 
+			
+			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
+			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
+			break;
+		case "lock":
+			
+			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
+			mongodb.logLockStatus(message[1], message[2]);
+			sendResponse(responseMessage, socket);
+			break;
+		case "scan":
+			
+			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
+			mongodb.addLock(responseMessage);
+			sendResponse(responseMessage, socket);			
+			break;
+		case "get":
+			sendResponse(mongodb.fetchLog(), socket);
+			break;
+		case "login":
+			sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
+			break;
+		case "status":
+			sendResponse(mongodb.getLockStatus(), socket);
+			break;
+		case "create":
+			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
+			break;
+		case "delete":
+			sendResponse(mongodb.removeUser(message[1]), socket);
+			break;
+		case "user":
+			sendResponse(mongodb.getUsers(), socket);
+			break;
+		default:
+			sendResponse("Server couldnt process the data", socket);
+			break;
 		}
 	}
 
@@ -98,7 +155,7 @@ public class ServerController {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		new ServerController();
 	}

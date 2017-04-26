@@ -103,13 +103,21 @@ public class MongoDBController {
 	}
 	
 	public String getChildIP(String lock){
-		
+		Document document = (Document) lockCollection.find(and(eq("type", "child"), eq("lock", lock)));
+		return document.getString("IP");
 	}
-	 public String getParent(){
-		 
-		 return lockCollection.find(eq("type", "master")).toString();
-	 }
 	
+	 public String getParent(){
+		 Document document = (Document) lockCollection.find(eq("type", "master"));
+		return document.getString("IP");
+	 }
+	 
+	 public void addLock(String ip){
+		 int length = (int) lockCollection.count();
+		 Document document = new Document("lock", ("lock"+(length))).append("status", "open")
+				 .append("type", "child").append("ip", ip);
+		 lockCollection.insertOne(document);
+	 }
 
 	// ***____________________ADMIN--METODER_______________***//
 
