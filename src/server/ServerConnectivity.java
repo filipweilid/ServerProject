@@ -30,9 +30,7 @@ public class ServerConnectivity {
 			while (true) {
 				// Reading the message from the client
 				socket = serverSocket.accept();
-				InputStream is = socket.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-				BufferedReader br = new BufferedReader(isr);
+				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 				String data = br.readLine();
 				controller.processData(data, socket); 	// serverControllern
 														// hanterar datan
