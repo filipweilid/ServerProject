@@ -19,11 +19,11 @@ import com.mongodb.client.MongoDatabase;
  * Class that handles the database
  */
 public class MongoDBController {
-//	private MongoClient mongoClient = new MongoClient("localhost", 27017);
-//	private MongoDatabase database = mongoClient.getDatabase("test");
-//	private MongoCollection<Document> logCollection = database.getCollection("log");
-//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-//	private MongoCollection<Document> userCollection = database.getCollection("users");
+	private MongoClient mongoClient = new MongoClient("localhost", 27017);
+	private MongoDatabase database = mongoClient.getDatabase("test");
+	private MongoCollection<Document> logCollection = database.getCollection("log");
+	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
+	private MongoCollection<Document> userCollection = database.getCollection("users");
 	
 	
 	/*
