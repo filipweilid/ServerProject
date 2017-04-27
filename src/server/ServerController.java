@@ -99,9 +99,11 @@ public class ServerController {
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
-			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-			mongodb.logLockStatus(message[1], message[2]);
-			sendResponse(responseMessage, socket);
+			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
+			responseMessage = arduinocontroller.sendRequest("hej", "2");
+			//mongodb.logLockStatus(message[1], message[2]);
+			//sendResponse(responseMessage, socket);
+			System.out.println(responseMessage);
 			break;
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
