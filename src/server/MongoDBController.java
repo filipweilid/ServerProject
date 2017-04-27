@@ -112,11 +112,12 @@ public class MongoDBController {
 		return document.getString("IP");
 	 }
 	 
-	 public void addLock(String ip){
+	 public String addLock(String ip, String type){
 		 int length = (int) lockCollection.count();
 		 Document document = new Document("lock", ("lock"+(length))).append("status", "open")
-				 .append("type", "child").append("ip", ip);
+				 .append("type", type).append("ip", ip);
 		 lockCollection.insertOne(document);
+		 return "OK";
 	 }
 
 	// ***____________________ADMIN--METODER_______________***//
