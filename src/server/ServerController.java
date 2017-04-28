@@ -100,9 +100,9 @@ public class ServerController {
 			break;
 		case "lock":
 			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-			responseMessage = arduinocontroller.sendRequest("hej", "2");
+			responseMessage = arduinocontroller.sendRequest("hej", message[1]);
 			//mongodb.logLockStatus(message[1], message[2]);
-			//sendResponse(responseMessage, socket);
+			sendResponse(responseMessage, socket);
 			System.out.println(responseMessage);
 			break;
 		case "scan":
@@ -129,6 +129,9 @@ public class ServerController {
 			break;
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
+			break;
+		case "hej":
+			sendResponse("hej white master",socket);
 			break;
 		default:
 			sendResponse("Server couldnt process the data", socket);
