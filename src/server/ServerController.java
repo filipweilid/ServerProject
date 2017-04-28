@@ -100,15 +100,17 @@ public class ServerController {
 			break;
 		case "lock":
 			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-			responseMessage = arduinocontroller.sendRequest("hej", "1");
+			responseMessage = arduinocontroller.sendRequest("hej", "2");
 			//mongodb.logLockStatus(message[1], message[2]);
-			sendResponse(responseMessage, socket);
+			//sendResponse(responseMessage, socket);
 			System.out.println(responseMessage);
 			break;
 		case "scan":
-			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
-			mongodb.addLock(responseMessage, "child");
-			sendResponse(responseMessage, socket);		
+			responseMessage = arduinocontroller.sendRequest("", "3");
+			String[] macip = responseMessage.split(";");
+			mongodb.addLock(macip[0], macip[1], "child");
+			System.out.println("message recieve:" + responseMessage);
+			sendResponse("ok", socket);			
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
@@ -128,9 +130,6 @@ public class ServerController {
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
 			break;
-		case "hej":
-			sendResponse(mongodb.addLock(socket.getInetAddress().toString(), "parent"), socket);
-			break;
 		default:
 			sendResponse("Server couldnt process the data", socket);
 			break;
@@ -145,7 +144,7 @@ public class ServerController {
 			OutputStream os = socket.getOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(os);
 			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(message + "\n");
+			bw.write(message);
 			System.out.println("Message sent to the client is :" + "\n" + message);
 			bw.flush();
 		} catch (IOException e) {

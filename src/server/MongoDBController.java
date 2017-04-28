@@ -19,11 +19,11 @@ import com.mongodb.client.MongoDatabase;
  * Class that handles the database
  */
 public class MongoDBController {
-	private MongoClient mongoClient = new MongoClient("localhost", 27017);
-	private MongoDatabase database = mongoClient.getDatabase("test");
-	private MongoCollection<Document> logCollection = database.getCollection("log");
-	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-	private MongoCollection<Document> userCollection = database.getCollection("users");
+//	private MongoClient mongoClient = new MongoClient("localhost", 27017);
+//	private MongoDatabase database = mongoClient.getDatabase("test");
+//	private MongoCollection<Document> logCollection = database.getCollection("log");
+//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
+//	private MongoCollection<Document> userCollection = database.getCollection("users");
 	
 	
 	/*
@@ -112,10 +112,10 @@ public class MongoDBController {
 		return document.getString("IP");
 	 }
 	 
-	 public String addLock(String ip, String type){
+	 public String addLock(String mac, String ip ,String type){
 		 int length = (int) lockCollection.count();
 		 Document document = new Document("lock", ("lock"+(length))).append("status", "open")
-				 .append("type", type).append("ip", ip);
+				 .append("type", type).append("ip", ip).append("macadress", mac);
 		 lockCollection.insertOne(document);
 		 return "OK";
 	 }
