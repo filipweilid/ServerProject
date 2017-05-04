@@ -134,6 +134,8 @@ public class ServerController {
 		case "hej":
 			sendResponse("hej white master",socket);
 			break;
+		case "key":
+			sendResponse("la till logg", socket);
 		default:
 			sendResponse("Server couldnt process the data", socket);
 			break;
