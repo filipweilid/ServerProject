@@ -91,6 +91,7 @@ public class ServerController {
 //	}
 
 	public void processData(String data, Socket socket) {
+		System.out.println(data);
 		message = data.split(";");
 		String commando = message[0];
 		switch (commando) {
