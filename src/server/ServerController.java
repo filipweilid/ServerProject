@@ -91,7 +91,7 @@ public class ServerController {
 //	}
 
 	public void processData(String data, Socket socket) {
-		System.out.println(data);
+		System.out.println("Message is: " + data);
 		message = data.split(";");
 		String commando = message[0];
 		switch (commando) {
@@ -101,17 +101,17 @@ public class ServerController {
 			break;
 		case "lock":
 			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-			responseMessage = arduinocontroller.sendRequest("hej", message[1]);
+			responseMessage = arduinocontroller.sendRequest("", message[1]);
 			//mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
-			System.out.println(responseMessage);
+			System.out.println("responseMessage= " + responseMessage);
 			break;
 		case "scan":
-			responseMessage = arduinocontroller.sendRequest("", "3");
+			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
 			String[] macip = responseMessage.split(";");
 			mongodb.addLock(macip[0], macip[1], "child");
 			System.out.println("message recieve:" + responseMessage);
-			sendResponse("ok", socket);			
+			sendResponse("lock added", socket);			
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
@@ -132,10 +132,12 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			sendResponse("hej white master",socket);
+			mongodb.addLock(message[1], socket.getInetAddress().toString(), "Master");
+			sendResponse("Ok from Server!,masterlock added!" ,socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);
+			break;
 		default:
 			sendResponse("Server couldnt process the data", socket);
 			break;

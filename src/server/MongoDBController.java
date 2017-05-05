@@ -19,11 +19,11 @@ import com.mongodb.client.MongoDatabase;
  * Class that handles the database
  */
 public class MongoDBController {
-//	private MongoClient mongoClient = new MongoClient("localhost", 27017);
-//	private MongoDatabase database = mongoClient.getDatabase("test");
-//	private MongoCollection<Document> logCollection = database.getCollection("log");
-//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-//	private MongoCollection<Document> userCollection = database.getCollection("users");
+	private MongoClient mongoClient = new MongoClient("localhost", 27017);
+	private MongoDatabase database = mongoClient.getDatabase("test");
+	private MongoCollection<Document> logCollection = database.getCollection("log");
+	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
+	private MongoCollection<Document> userCollection = database.getCollection("users");
 	
 	
 	/*
@@ -108,7 +108,7 @@ public class MongoDBController {
 	}
 	
 	 public String getParent(){
-		 Document document = (Document) lockCollection.find(eq("type", "master"));
+		 Document document = (Document) lockCollection.find(eq("type", "Parent"));
 		return document.getString("IP");
 	 }
 	 
@@ -118,6 +118,17 @@ public class MongoDBController {
 				 .append("type", type).append("ip", ip).append("macadress", mac);
 		 lockCollection.insertOne(document);
 		 return "OK";
+	 }
+	 
+	 public String addMasterLock(String mac, String ip, String type){
+		 int length = (int)lockCollection.count(eq("type", "parent"));
+		 if(length<1){
+		 Document document = new Document("lock", "master").append("status", "open").append("type", "parent")
+				 .append("ip", ip).append("macadress", mac);
+		 lockCollection.insertOne(document);
+		 return "OK";
+		 }
+		 return "NOT OK";
 	 }
 
 	// ***____________________ADMIN--METODER_______________***//
