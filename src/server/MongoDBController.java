@@ -102,14 +102,14 @@ public class MongoDBController {
 		return returnmessage;
 	}
 	
-	public String getChildIP(String lock){
-		Document document = (Document) lockCollection.find(and(eq("type", "child"), eq("lock", lock)));
-		return document.getString("IP");
+	public String getIP(String lock){
+		Document document = (Document) lockCollection.find(eq("lock", lock)).first();
+		return document.getString("ip");
 	}
 	
 	 public String getParent(){
-		 Document document = (Document) lockCollection.find(eq("type", "Parent"));
-		return document.getString("IP");
+		 Document document = (Document) lockCollection.find(eq("type", "parent")).first();
+		return document.getString("ip");
 	 }
 	 
 	 public String addLock(String mac, String ip ,String type){

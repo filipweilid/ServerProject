@@ -100,8 +100,8 @@ public class ServerController {
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
-			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-			responseMessage = arduinocontroller.sendRequest("", message[1]);
+			responseMessage = arduinocontroller.sendRequest(mongodb.getIP(message[1]), message[2]);
+			//responseMessage = arduinocontroller.sendRequest("", message[1]);
 			//mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
 			System.out.println("responseMessage= " + responseMessage);
@@ -109,9 +109,13 @@ public class ServerController {
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
 			String[] macip = responseMessage.split(";");
-			mongodb.addLock(macip[0], macip[1], "child");
-			System.out.println("message recieve:" + responseMessage);
-			sendResponse("lock added", socket);			
+			if(macip.length > 1) {
+				mongodb.addLock(macip[0], macip[1], "child");
+				System.out.println("message recieve:" + responseMessage);
+				sendResponse("lock added", socket);	
+			} else {
+				sendResponse(responseMessage, socket);
+			}
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
@@ -132,8 +136,7 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			mongodb.addLock(message[1], socket.getInetAddress().toString(), "Master");
-			sendResponse("Ok from Server!,masterlock added!" ,socket);
+			sendResponse(mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent") ,socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);
