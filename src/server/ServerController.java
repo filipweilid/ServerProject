@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.UUID;
+
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
@@ -28,8 +30,8 @@ public class ServerController {
 	// private MongoCollection<Document> userCollection =
 	// database.getCollection("users");
 	private ServerConnectivity test;
-	private ArduinoController arduinocontroller = new ArduinoController();
 	private MongoDBController mongodb = new MongoDBController();
+	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
 	private String[] message;
 
@@ -37,72 +39,80 @@ public class ServerController {
 		this.test = new ServerConnectivity(25000, this);
 	}
 
-//	public void proccesData(String data, Socket socket) {
-//		message = data.split(";");
-//
-//		if (message[0].equals("log")) {
-//			// skriv till databas här
-//			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
-//			// addLog(message[1], socket.getInetAddress().toString(),
-//			// message[2]);
-//			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
-//		} else if (message[0].equals("lock")) {
-//
-//			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
-//			// skriv till databas här
-//			mongodb.logLockStatus(message[1], message[2]);
-//			sendResponse(responseMessage, socket);
-//
-//		} else if (message[0].equals("scan")) {
-//			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
-//			mongodb.addLock(responseMessage);
-//			sendResponse(responseMessage, socket);
-//		}
-//
-//		else if (message[0].equals("get")) {
-//
-//			// hämta från databas och skickar
-//			sendResponse(mongodb.fetchLog(), socket);
-//		}
-//
-//		else if (message[0].equals("login")) {
-//			// hämta från databas här
-//			sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
-//		}
-//
-//		else if (message[0].equals("status")) {
-//			sendResponse(mongodb.getLockStatus(), socket);
-//		}
-//
-//		else if (message[0].equals("create")) {
-//			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
-//		}
-//
-//		else if (message[0].equals("delete")) {
-//			sendResponse(mongodb.removeUser(message[1]), socket);
-//		}
-//
-//		else if (message[0].equals("users")) {
-//			sendResponse(mongodb.getUsers(), socket);
-//
-//		} else {
-//			sendResponse("Server couldnt process the data", socket);
-//		}
-//	}
+	// public void proccesData(String data, Socket socket) {
+	// message = data.split(";");
+	//
+	// if (message[0].equals("log")) {
+	// // skriv till databas här
+	// mongodb.logDatabase(message[1], socket.getInetAddress().toString(),
+	// message[2]);
+	// // addLog(message[1], socket.getInetAddress().toString(),
+	// // message[2]);
+	// sendResponse("Logged action for " + message[1] + " by: " +
+	// socket.getInetAddress().toString(), socket);
+	// } else if (message[0].equals("lock")) {
+	//
+	// responseMessage =
+	// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
+	// message[2]);
+	// // skriv till databas här
+	// mongodb.logLockStatus(message[1], message[2]);
+	// sendResponse(responseMessage, socket);
+	//
+	// } else if (message[0].equals("scan")) {
+	// responseMessage = arduinocontroller.sendRequest("255.255.255.255",
+	// message[1]);
+	// mongodb.addLock(responseMessage);
+	// sendResponse(responseMessage, socket);
+	// }
+	//
+	// else if (message[0].equals("get")) {
+	//
+	// // hämta från databas och skickar
+	// sendResponse(mongodb.fetchLog(), socket);
+	// }
+	//
+	// else if (message[0].equals("login")) {
+	// // hämta från databas här
+	// sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
+	// }
+	//
+	// else if (message[0].equals("status")) {
+	// sendResponse(mongodb.getLockStatus(), socket);
+	// }
+	//
+	// else if (message[0].equals("create")) {
+	// sendResponse(mongodb.createUser(message[1], message[2], message[3]),
+	// socket);
+	// }
+	//
+	// else if (message[0].equals("delete")) {
+	// sendResponse(mongodb.removeUser(message[1]), socket);
+	// }
+	//
+	// else if (message[0].equals("users")) {
+	// sendResponse(mongodb.getUsers(), socket);
+	//
+	// } else {
+	// sendResponse("Server couldnt process the data", socket);
+	// }
+	// }
 
 	public void processData(String data, Socket socket) {
 		System.out.println("Message is: " + data);
 		message = data.split(";");
 		String commando = message[0];
 		switch (commando) {
-		case "log": 
+		case "log":
 			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
-			//responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
+			// responseMessage =
+			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
+			// message[2]);
 			responseMessage = arduinocontroller.sendRequest("", message[1]);
-			//mongodb.logLockStatus(message[1], message[2]);
+			// mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
 			System.out.println("responseMessage= " + responseMessage);
 			break;
@@ -111,13 +121,20 @@ public class ServerController {
 			String[] macip = responseMessage.split(";");
 			mongodb.addLock(macip[0], macip[1], "child");
 			System.out.println("message recieve:" + responseMessage);
-			sendResponse("lock added", socket);			
+			sendResponse("lock added", socket);
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
 			break;
 		case "login":
-			sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
+			String verify = mongodb.verifyLogin(message[1], message[2]);
+			if (verify == "OK") {
+				String key = generateKey(); //genererar en session key
+				new Session(mongodb, message[1], key).start(); //skapar timer för keyn
+				sendResponse(verify + ";" + key + ";" , socket); //skickar tillbaka key + 
+			} else {
+				sendResponse(verify, socket);
+			}
 			break;
 		case "status":
 			sendResponse(mongodb.getLockStatus(), socket);
@@ -132,8 +149,8 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			mongodb.addLock(message[1], socket.getInetAddress().toString(), "Master");
-			sendResponse("Ok from Server!,masterlock added!" ,socket);
+			//mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
+			sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);
@@ -142,6 +159,12 @@ public class ServerController {
 			sendResponse("Server couldnt process the data", socket);
 			break;
 		}
+	}
+
+	private String generateKey() {
+		UUID id = UUID.randomUUID();
+		String key = id.toString();
+		return key;
 	}
 
 	/*

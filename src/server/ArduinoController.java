@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.UUID;
 
 /*
  * Class that creates socketconnection with the masterlock and sends
@@ -16,17 +17,21 @@ import java.net.Socket;
 
 
 public class ArduinoController {
-	private MongoDBController mongodb = new MongoDBController();
+	private MongoDBController mongodb;
 	private Socket socket;
 	private String returnMessage;
 	
+	public ArduinoController(MongoDBController controller){
+		this.mongodb = controller;
+	}
+	
 	public String sendRequest(String internalIP, String command){
 		try {
+			socket = new Socket("192.168.1.100", 8888);
 			//socket = new Socket(mongodb.getParent(), 8888);
-			socket = new Socket(mongodb.getParent(), 8888);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			//bw.write(createMessage(internalIP, command));
-			bw.write(createMessage(internalIP, command));
+			bw.write(createMessage("localhost", command));
 			bw.flush();
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			returnMessage = br.readLine();
@@ -47,5 +52,11 @@ public class ArduinoController {
 	public String createMessage(String ip, String message){
 		String newMessage = message+ip+ "\n";
 		return newMessage;
+	}
+	
+	private String generateKey() {
+		UUID id = UUID.randomUUID();
+		String key = id.toString();
+		return key;
 	}
 }
