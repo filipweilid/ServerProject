@@ -149,7 +149,7 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			//mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
+			mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
 			sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
