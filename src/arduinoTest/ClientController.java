@@ -16,7 +16,7 @@ import java.net.Socket;
 public class ClientController {
 	
 	private static Socket socket;
-	private String hostArduino = "192.168.1.101";
+	private String hostArduino = "192.168.1.100";
 	private int portArduino = 8888;
 	private String hostServer = "localhost";
 	private int portServer = 25000;
