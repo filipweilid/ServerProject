@@ -33,7 +33,7 @@ public class UDPUserGUI extends JPanel implements ActionListener {
 		btnOff2.addActionListener(this);
 
 		try {
-			udpsend = new UDPSend("192.168.0.10", 8888);
+			udpsend = new UDPSend("255.255.255.255", 8888);
 
 		} catch (SocketException e) {
 			e.printStackTrace();
