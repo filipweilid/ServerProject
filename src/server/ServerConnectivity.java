@@ -39,7 +39,7 @@ public class ServerConnectivity {
 			e.printStackTrace();
 		} finally {
 			try {
-				socket.close();
+				//socket.close();
 			} catch (Exception e) {
 			}
 		}

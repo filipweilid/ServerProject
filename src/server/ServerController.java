@@ -111,7 +111,7 @@ public class ServerController {
 			// responseMessage =
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
-			responseMessage = arduinocontroller.sendRequest("", message[1]);
+			responseMessage = arduinocontroller.sendRequest(message[2], message[1]);
 			// mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
 			System.out.println("responseMessage= " + responseMessage);
@@ -149,7 +149,7 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
+			//mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
 			sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
