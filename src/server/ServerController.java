@@ -19,58 +19,131 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class ServerController {
-	private MongoClient mongoClient = new MongoClient("localhost", 27017);
-	private MongoDatabase database = mongoClient.getDatabase("test");
-	private MongoCollection<Document> logCollection = database.getCollection("log");
-	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-	private MongoCollection<Document> userCollection = database.getCollection("users");
-	ServerConnectivity test;
+	// private MongoClient mongoClient = new MongoClient("localhost", 27017);
+	// private MongoDatabase database = mongoClient.getDatabase("test");
+	// private MongoCollection<Document> logCollection =
+	// database.getCollection("log");
+	// private MongoCollection<Document> lockCollection =
+	// database.getCollection("lockStatus");
+	// private MongoCollection<Document> userCollection =
+	// database.getCollection("users");
+	private ServerConnectivity test;
+	private ArduinoController arduinocontroller = new ArduinoController();
+	private MongoDBController mongodb = new MongoDBController();
+	private String responseMessage;
+	private String[] message;
 
 	public ServerController() {
 		this.test = new ServerConnectivity(25000, this);
 	}
 
-	public void proccesData(String data, Socket socket) {
-		String[] message = data.split(";");
-		if (message[0].equals("log")) {
-			// skriv till databas här
-			logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
-			// addLog(message[1], socket.getInetAddress().toString(),
-			// message[2]);
+//	public void proccesData(String data, Socket socket) {
+//		message = data.split(";");
+//
+//		if (message[0].equals("log")) {
+//			// skriv till databas här
+//			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
+//			// addLog(message[1], socket.getInetAddress().toString(),
+//			// message[2]);
+//			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
+//		} else if (message[0].equals("lock")) {
+//
+//			responseMessage = arduinocontroller.sendRequest(mongodb.getChildIP(message[1]), message[2]);
+//			// skriv till databas här
+//			mongodb.logLockStatus(message[1], message[2]);
+//			sendResponse(responseMessage, socket);
+//
+//		} else if (message[0].equals("scan")) {
+//			responseMessage = arduinocontroller.sendRequest("255.255.255.255", message[1]);
+//			mongodb.addLock(responseMessage);
+//			sendResponse(responseMessage, socket);
+//		}
+//
+//		else if (message[0].equals("get")) {
+//
+//			// hämta från databas och skickar
+//			sendResponse(mongodb.fetchLog(), socket);
+//		}
+//
+//		else if (message[0].equals("login")) {
+//			// hämta från databas här
+//			sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
+//		}
+//
+//		else if (message[0].equals("status")) {
+//			sendResponse(mongodb.getLockStatus(), socket);
+//		}
+//
+//		else if (message[0].equals("create")) {
+//			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
+//		}
+//
+//		else if (message[0].equals("delete")) {
+//			sendResponse(mongodb.removeUser(message[1]), socket);
+//		}
+//
+//		else if (message[0].equals("users")) {
+//			sendResponse(mongodb.getUsers(), socket);
+//
+//		} else {
+//			sendResponse("Server couldnt process the data", socket);
+//		}
+//	}
+
+	public void processData(String data, Socket socket) {
+		System.out.println("Message is: " + data);
+		message = data.split(";");
+		String commando = message[0];
+		switch (commando) {
+		case "log": 
+			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
-		} else if (message[0].equals("lock")) {
-
-			// skriv till databas här
-			logLockStatus(message[1], message[2]);
-			sendResponse("Lock status changed for: " + message[1] + "to: " + message[2], socket);
-		} else if (message[0].equals("get")) {
-
-			// hämta från databas och skickar
-			sendResponse(fetchLog(), socket);
-		} 
-
-		else if (message[0].equals("login")) {
-			// hämta från databas här
-			sendResponse(verifyLogin(message[1], message[2]), socket);
-		}
-
-		else if (message[0].equals("status")) {
-			sendResponse(getLockStatus(), socket);
-		}
-		
-		else if (message[0].equals("create")) {
-			sendResponse(createUser(message[1], message[2], message[3]), socket);
-		}
-		
-		else if (message[0].equals("delete")) {
-			sendResponse(removeUser(message[1]), socket);
-		}
-		
-		else if (message[0].equals("users")) {
-			sendResponse(getUsers(), socket);
-			
-		} else {
+			break;
+		case "lock":
+			responseMessage = arduinocontroller.sendRequest(mongodb.getIP(message[1]), message[2]);
+			//responseMessage = arduinocontroller.sendRequest("", message[1]);
+			//mongodb.logLockStatus(message[1], message[2]);
+			sendResponse(responseMessage, socket);
+			System.out.println("responseMessage= " + responseMessage);
+			break;
+		case "scan":
+			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
+			String[] macip = responseMessage.split(";");
+			if(macip.length > 1) {
+				mongodb.addLock(macip[0], macip[1], "child");
+				System.out.println("message recieve:" + responseMessage);
+				sendResponse("lock added", socket);	
+			} else {
+				sendResponse(responseMessage, socket);
+			}
+			break;
+		case "get":
+			sendResponse(mongodb.fetchLog(), socket);
+			break;
+		case "login":
+			sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
+			break;
+		case "status":
+			sendResponse(mongodb.getLockStatus(), socket);
+			break;
+		case "create":
+			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
+			break;
+		case "delete":
+			sendResponse(mongodb.removeUser(message[1]), socket);
+			break;
+		case "user":
+			sendResponse(mongodb.getUsers(), socket);
+			break;
+		case "hej":
+			sendResponse(mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent") ,socket);
+			break;
+		case "key":
+			sendResponse("la till logg", socket);
+			break;
+		default:
 			sendResponse("Server couldnt process the data", socket);
+			break;
 		}
 	}
 
@@ -94,121 +167,6 @@ public class ServerController {
 			}
 		}
 	}
-
-	/*
-	 * loggar data till servern
-	 */
-	public void logDatabase(String text, String ip, String username) {
-		TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
-		Calendar c = Calendar.getInstance(timeZone);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-		simpleDateFormat.setTimeZone(timeZone);
-		Document document = new Document("username", username).append("date", simpleDateFormat.format(c.getTime()))
-				.append("ip", ip).append("message", text);
-		logCollection.insertOne(document);
-	}
-
-	/*
-	 * Fetches and returns the log as a string
-	 */
-	public String fetchLog() {
-		Iterator<Document> iter = logCollection.find().iterator();
-		String returnmessage = "";
-		while (iter.hasNext()) {
-			Document document = iter.next();
-			String info = document.get("date") + ";" + document.getString("message") + ";"
-					+ document.getString("username") + ";" + document.get("ip");
-			returnmessage = returnmessage + info + ";";
-		}
-		return returnmessage;
-	}
-
-	/*
-	 * Fetches log for a specific user
-	 */
-	public String fetchLogForUser(String username) {
-		Iterator<Document> iter = logCollection.find(eq("username", username)).iterator();
-		String returnmessage = "";
-		while (iter.hasNext()) {
-			Document document = iter.next();
-			String info = document.get("date") + ";" + document.getString("message") + ";"
-					+ document.getString("username") + ";" + document.get("ip");
-			returnmessage = returnmessage + info + ";";
-		}
-		return returnmessage;
-	}
-
-	/*
-	 * checks with database if username and password is correct
-	 */
-	public String verifyLogin(String user, String password) {
-		if (userCollection.find(and(eq("username", user), eq("password", password))).first() != null) {
-			System.out.println("Success");
-			return "OK;" + userCollection.find(eq("username", user)).first().getString("role");
-		} else {
-			return "NOTOK";
-		}
-	}
-	
-	/*
-	 * Changes the status of lock
-	 */
-	public void logLockStatus(String lock, String status) {
-		lockCollection.updateOne(eq("lock", lock), set("status", status));
-	}
-
-	/*
-	 * Retrieves the lockstatus of a certain lock
-	 */
-	public String getLockStatus() {
-		//return lockCollection.find(eq("lock", "lock")).first().getString("status");
-		Iterator<Document> iter = lockCollection.find().iterator();
-		String returnmessage = "";
-		while (iter.hasNext()) {
-			Document document = iter.next();
-			returnmessage = returnmessage + document.getString("lock")+ ";" + document.getString("status")+";";
-		}
-		return returnmessage;
-	}
-
-	// ***____________________ADMIN--METODER_______________***//
-
-	/*
-	 * creates new user
-	 */
-	public String createUser(String username, String password, String role) {
-		if (userCollection.find(eq("username", username)).first() == null) {
-			Document document = new Document("username", username).append("password", password).append("role", role);
-			userCollection.insertOne(document);
-			return "OK";
-		}
-		return "NOTOK";
-	}
-
-	/*
-	 * removes a user FIXA DENNA METODEN
-	 */
-	public String removeUser(String username) {
-		if(userCollection.findOneAndDelete((eq("username", username)))!= null){
-			return "OK";
-		}
-		return "NOTOK";
-	}
-
-	/*
-	 * Retrieves a user
-	 */
-	public String getUsers() {
-		Iterator<Document> iter = userCollection.find().iterator();
-		String returnmessage = "";
-		while (iter.hasNext()) {
-			Document document = iter.next();
-			returnmessage = returnmessage + document.getString("username") + ";" + document.getString("role") + ";";
-		}
-		return returnmessage;
-	}
-
-	// ***_______________________________________________***//
 
 	public static void main(String[] args) {
 		new ServerController();
