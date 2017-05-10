@@ -114,7 +114,7 @@ public class MongoDBController {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
 	}
 	
-	public String fingLock(String mac){
+	public String findLock(String mac){
 		return "test";
 	}
 

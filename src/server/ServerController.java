@@ -30,7 +30,7 @@ public class ServerController {
 	// database.getCollection("lockStatus");
 	// private MongoCollection<Document> userCollection =
 	// database.getCollection("users");
-	//private ServerConnectivity test;
+	// private ServerConnectivity test;
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
@@ -38,7 +38,7 @@ public class ServerController {
 	private ArrayList<Session> list = new ArrayList<Session>();
 	private Socket socket;
 
-	public ServerController() {	
+	public ServerController() {
 		new ServerConnectivity(25000, this);
 	}
 
@@ -102,7 +102,7 @@ public class ServerController {
 	// }
 
 	public void processData(String data, Socket socket) {
-		this.socket = socket;
+		// this.socket = socket;
 		System.out.println("Message is: " + data);
 		message = data.split(";");
 		String commando = message[0];
@@ -149,10 +149,14 @@ public class ServerController {
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
 			responseMessage = arduinocontroller.sendRequest(message[2], message[1]);
-			logAction("låsnamn", responseMessage);
-			// mongodb.logLockStatus(message[1], message[2]);
-			sendResponse(responseMessage, socket);
-			System.out.println("responseMessage= " + responseMessage);
+			if (responseMessage == "ok") {
+				logAction("låsnamn", responseMessage);
+				sendResponse(responseMessage, socket);
+			} else {
+				// mongodb.logLockStatus(message[1], message[2]);
+				sendResponse(responseMessage, socket);
+				System.out.println("responseMessage= " + responseMessage);
+			}
 			break;
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
@@ -218,7 +222,7 @@ public class ServerController {
 	public void logAction(String lock, String status) {
 		mongodb.logDatabase(lock, socket.getInetAddress().toString(), status);
 		mongodb.logLockStatus(lock, status);
-	}
+	}	
 
 	private String generateKey() {
 		UUID id = UUID.randomUUID();
