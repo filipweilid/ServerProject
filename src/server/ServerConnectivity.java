@@ -23,6 +23,7 @@ public class ServerConnectivity {
 	 * Method that listens to the serversocket and executes the action
 	 */
 	public void getConnection() {
+		
 		try {
 			// Server is running always. This is done using this while(true)
 			ServerSocket serverSocket = new ServerSocket(port);

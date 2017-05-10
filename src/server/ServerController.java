@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
@@ -34,6 +35,8 @@ public class ServerController {
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
 	private String[] message;
+	private ArrayList<Session> list = new ArrayList<Session>();
+	private Socket socket;
 
 	public ServerController() {
 		this.test = new ServerConnectivity(25000, this);
@@ -99,9 +102,43 @@ public class ServerController {
 	// }
 
 	public void processData(String data, Socket socket) {
+		this.socket = socket;
 		System.out.println("Message is: " + data);
 		message = data.split(";");
 		String commando = message[0];
+		// 3 fall utan session key, 2 kommer från arduino och vid login
+		if (commando == "login") {
+			String verify = mongodb.verifyLogin(message[1], message[2]);
+			if (verify != "NOTOK") {
+				String key = generateKey(); // genererar en session key
+				Session ses = new Session(mongodb, message[1], key);// skapar
+																	// timer för
+																	// keyn
+				ses.start();
+				list.add(ses);
+				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); // skickar
+				// tillbaka key
+				// + id?
+			} else {
+				sendResponse(verify, socket);
+			}
+		} else if (commando == "hej") {
+			mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
+			sendResponse("Ok from Server!,masterlock added!", socket);
+		} else if (commando == "key") { // någon vred med nyckel
+			logAction("låsnamn", message[2]);
+			// mongodb.logLockStatus("låsnamn", message[2]);
+			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
+		} else {
+			if (mongodb.checkKey(message[1], message[2]) == "OK") {
+				executeCommando(commando, socket);
+			} else {
+				sendResponse("key not valid!", socket);
+			}
+		}
+	}
+
+	public void executeCommando(String commando, Socket socket) {
 		switch (commando) {
 		case "log":
 			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
@@ -112,6 +149,7 @@ public class ServerController {
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
 			responseMessage = arduinocontroller.sendRequest(message[2], message[1]);
+			logAction("låsnamn", responseMessage);
 			// mongodb.logLockStatus(message[1], message[2]);
 			sendResponse(responseMessage, socket);
 			System.out.println("responseMessage= " + responseMessage);
@@ -127,14 +165,29 @@ public class ServerController {
 			sendResponse(mongodb.fetchLog(), socket);
 			break;
 		case "login":
-			String verify = mongodb.verifyLogin(message[1], message[2]);
-			if (verify == "OK") {
-				String key = generateKey(); //genererar en session key
-				new Session(mongodb, message[1], key).start(); //skapar timer för keyn
-				sendResponse(verify + ";" + key + ";" , socket); //skickar tillbaka key + 
-			} else {
-				sendResponse(verify, socket);
+			// String verify = mongodb.verifyLogin(message[1], message[2]);
+			// if (verify == "OK") {
+			// String key = generateKey(); //genererar en session key
+			// Session ses = new Session(mongodb, message[1], key);//skapar
+			// timer för keyn
+			// ses.start();
+			// list.add(ses);
+			// sendResponse(verify + ";" + key + ";" , socket); //skickar
+			// tillbaka key + id?
+			// } else {
+			// sendResponse(verify, socket);
+			// }
+			// break;
+		case "logoff":
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getUser() == message[1]) {
+					list.get(i).terminate(); // tar bort sessionkey
+					Session session = list.remove(i); // tar bort
+														// sessionobjektet
+					sendResponse(session.getUser(), socket);
+				}
 			}
+			sendResponse("nyckel borta", socket);
 			break;
 		case "status":
 			sendResponse(mongodb.getLockStatus(), socket);
@@ -149,8 +202,9 @@ public class ServerController {
 			sendResponse(mongodb.getUsers(), socket);
 			break;
 		case "hej":
-			//mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
-			sendResponse("Ok from Server!,masterlock added!", socket);
+			// mongodb.addLock(message[1], socket.getInetAddress().toString(),
+			// "parent");
+			// sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);
@@ -159,6 +213,11 @@ public class ServerController {
 			sendResponse("Server couldnt process the data", socket);
 			break;
 		}
+	}
+
+	public void logAction(String lock, String status) {
+		mongodb.logDatabase(lock, socket.getInetAddress().toString(), status);
+		mongodb.logLockStatus(lock, status);
 	}
 
 	private String generateKey() {

@@ -25,13 +25,13 @@ public class ArduinoController {
 		this.mongodb = controller;
 	}
 	
-	public String sendRequest(String internalIP, String command){
+	public String sendRequest(String lockname, String command){
 		try {
 			socket = new Socket("192.168.1.101", 8888);
 			//socket = new Socket(mongodb.getParent(), 8888);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			//bw.write(createMessage(internalIP, command));
-			bw.write(createMessage(internalIP, command));
+			bw.write(createMessage(lockname, command));
 			bw.flush();
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			returnMessage = br.readLine();
@@ -52,11 +52,5 @@ public class ArduinoController {
 	public String createMessage(String ip, String message){
 		String newMessage = message+ip+ "\n";
 		return newMessage;
-	}
-	
-	private String generateKey() {
-		UUID id = UUID.randomUUID();
-		String key = id.toString();
-		return key;
 	}
 }

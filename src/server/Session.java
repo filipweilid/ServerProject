@@ -18,16 +18,23 @@ public class Session {
 	private Timer timer = new Timer();
 	TimerTask task = new TimerTask(){
 		public void run(){
-			controller.removeKey(user);
+			terminate();
 			task.cancel();
 			}
 	};
-	
-	
+
 	public void start(){
 		///timer.scheduleAtFixedRate(task, 100000, 10000);
 		controller.addKey(key,user);
 		System.out.println(key);
-		timer.schedule(task, 10000);
+		timer.schedule(task, 1000*60*3); //3min
+	}
+	
+	public String getUser(){
+		return user;
+	}
+	
+	public void terminate(){
+		controller.removeKey(user);
 	}
 }

@@ -21,11 +21,11 @@ import com.mongodb.client.MongoDatabase;
  * Class that handles the database
  */
 public class MongoDBController {
-//	private MongoClient mongoClient = new MongoClient("188.226.147.98", 27017);
-//	private MongoDatabase database = mongoClient.getDatabase("test");
-//	private MongoCollection<Document> logCollection = database.getCollection("log");
-//	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-//	private MongoCollection<Document> userCollection = database.getCollection("users");
+	private MongoClient mongoClient = new MongoClient("localhost", 27017);
+	private MongoDatabase database = mongoClient.getDatabase("test");
+	private MongoCollection<Document> logCollection = database.getCollection("log");
+	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
+	private MongoCollection<Document> userCollection = database.getCollection("users");
 
 	/*
 	 * loggar data till servern
@@ -90,9 +90,12 @@ public class MongoDBController {
 		userCollection.updateOne(eq("username", username), set("sessionkey", "default"));
 	}
 
-	public String checkKey(String key, String hexString) {
-		ObjectId id = new ObjectId(hexString);
-		if (userCollection.find(and(eq("sessionkey", key), eq("_id", id))).first() != null) {
+	public String checkKey(String key, String id) {
+		if(key == "default"){ //hack
+			return "NOTOK";
+		}
+		ObjectId object = new ObjectId(id);
+		if (userCollection.find(and(eq("sessionkey", key), eq("_id", object))).first() != null) {
 			return "OK";
 		} else {
 			return "NOTOK";
@@ -109,6 +112,10 @@ public class MongoDBController {
 	 */
 	public void logLockStatus(String lock, String status) {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
+	}
+	
+	public String fingLock(String mac){
+		return "test";
 	}
 
 	/*
@@ -132,13 +139,13 @@ public class MongoDBController {
 	}
 
 	public String getParent() {
-		Document document = (Document) lockCollection.find(eq("type", "Parent"));
+		Document document = (Document) lockCollection.find(eq("type", "parent"));
 		return document.getString("IP");
 	}
 
 	public String addLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count();
-		Document document = new Document("lock", ("lock" + (length))).append("status", "open").append("type", type)
+		Document document = new Document("lock", ("lock" + (length))).append("status", "unlocked").append("type", type)
 				.append("ip", ip).append("macadress", mac);
 		lockCollection.insertOne(document);
 		return "OK";
@@ -147,12 +154,12 @@ public class MongoDBController {
 	public String addMasterLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count(eq("type", "parent"));
 		if (length < 1) {
-			Document document = new Document("lock", "master").append("status", "open").append("type", "parent")
+			Document document = new Document("lock", "master").append("status", "unlocked").append("type", "parent")
 					.append("ip", ip).append("macadress", mac);
 			lockCollection.insertOne(document);
 			return "OK";
 		}
-		return "NOT OK";
+		return "NOTOK";
 	}
 
 	// ***____________________ADMIN--METODER_______________***//
