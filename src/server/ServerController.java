@@ -30,7 +30,7 @@ public class ServerController {
 	// database.getCollection("lockStatus");
 	// private MongoCollection<Document> userCollection =
 	// database.getCollection("users");
-	private ServerConnectivity test;
+	//private ServerConnectivity test;
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
@@ -38,8 +38,8 @@ public class ServerController {
 	private ArrayList<Session> list = new ArrayList<Session>();
 	private Socket socket;
 
-	public ServerController() {
-		this.test = new ServerConnectivity(25000, this);
+	public ServerController() {	
+		new ServerConnectivity(25000, this);
 	}
 
 	// public void proccesData(String data, Socket socket) {
