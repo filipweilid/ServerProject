@@ -30,13 +30,13 @@ public class MongoDBController {
 	/*
 	 * loggar data till servern
 	 */
-	public void logDatabase(String text, String ip, String username) {
+	public void logDatabase(String action, String ip, String username, String lock) {
 		TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
 		Calendar c = Calendar.getInstance(timeZone); 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 		simpleDateFormat.setTimeZone(timeZone);
-		Document document = new Document("username", username).append("date", simpleDateFormat.format(c.getTime()))
-				.append("ip", ip).append("message", text);
+		Document document = new Document("lock", lock).append("username", username).append("date", simpleDateFormat.format(c.getTime()))
+				.append("ip", ip).append("action", action);
 		logCollection.insertOne(document);
 	}
 
@@ -48,8 +48,8 @@ public class MongoDBController {
 		String returnmessage = "";
 		while (iter.hasNext()) {
 			Document document = iter.next();
-			String info = document.get("date") + ";" + document.getString("message") + ";"
-					+ document.getString("username") + ";" + document.get("ip");
+			String info = document.get("date") + ";" + document.getString("action") + ";"
+					+ document.getString("username") + ";" + document.get("ip") + ";" + document.get("lock");
 			returnmessage = returnmessage + info + ";";
 		}
 		return returnmessage;
@@ -105,6 +105,11 @@ public class MongoDBController {
 	public String getID(String user) {
 		Document document = userCollection.find(and(eq("username", user))).first();
 		return document.getObjectId("_id").toHexString();
+	}
+	
+	public String getUsername(String id) {
+		Document document = userCollection.find(eq("_id", new ObjectId(id))).first();
+		return document.get("username").toString();
 	}
 
 	/*

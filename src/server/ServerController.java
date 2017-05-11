@@ -36,7 +36,6 @@ public class ServerController {
 	private String responseMessage;
 	private String[] message;
 	private ArrayList<Session> list = new ArrayList<Session>();
-	private Socket socket;
 
 	public ServerController() {
 		new ServerConnectivity(25000, this);
@@ -141,7 +140,7 @@ public class ServerController {
 	public void executeCommando(String commando, Socket socket) {
 		switch (commando) {
 		case "log":
-			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
+//			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
@@ -150,7 +149,7 @@ public class ServerController {
 			// message[2]);
 			responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
 			if (responseMessage.equals("locked") || responseMessage.equals("unlocked")) {
-				logAction(message[4], responseMessage);
+				logAction(message[4], responseMessage, mongodb.getUsername(message[1]), socket);
 				sendResponse(responseMessage, socket);
 			} else {
 				// mongodb.logLockStatus(message[1], message[2]);
@@ -185,10 +184,10 @@ public class ServerController {
 			sendResponse(mongodb.getLockStatus(), socket);
 			break;
 		case "create":
-			sendResponse(mongodb.createUser(message[1], message[2], message[3]), socket);
+			sendResponse(mongodb.createUser(message[3], message[4], message[5]), socket);
 			break;
 		case "delete":
-			sendResponse(mongodb.removeUser(message[1]), socket);
+			sendResponse(mongodb.removeUser(message[3]), socket);
 			break;
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
@@ -207,10 +206,10 @@ public class ServerController {
 		}
 	}
 
-	public void logAction(String lock, String status) {
-//		mongodb.logDatabase(lock, socket.getInetAddress().toString(), status);
+	public void logAction(String lock, String status, String username, Socket socket) {
+		mongodb.logDatabase(status, socket.getInetAddress().toString().substring(1), username, lock);
 		mongodb.logLockStatus(lock, status);
-	}	
+	}
 
 	private String generateKey() {
 		UUID id = UUID.randomUUID();
