@@ -32,7 +32,7 @@ public class MongoDBController {
 	 */
 	public void logDatabase(String text, String ip, String username) {
 		TimeZone timeZone = TimeZone.getTimeZone("GMT+2");
-		Calendar c = Calendar.getInstance(timeZone);
+		Calendar c = Calendar.getInstance(timeZone); 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 		simpleDateFormat.setTimeZone(timeZone);
 		Document document = new Document("username", username).append("date", simpleDateFormat.format(c.getTime()))
@@ -91,7 +91,7 @@ public class MongoDBController {
 	}
 
 	public String checkKey(String key, String id) {
-		if(key == "default"){ //hack
+		if(key.equals("default")){ //hack
 			return "NOTOK";
 		}
 		ObjectId object = new ObjectId(id);
@@ -114,8 +114,9 @@ public class MongoDBController {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
 	}
 	
-	public String findLock(String mac){
-		return "test";
+	public String findIP(String name){
+		Document document = (Document) lockCollection.find(eq("lock", name)).first();
+		return document.get("ip").toString();
 	}
 
 	/*
@@ -134,27 +135,32 @@ public class MongoDBController {
 	}
 
 	public String getChildIP(String lock) {
-		Document document = (Document) lockCollection.find(and(eq("type", "child"), eq("lock", lock)));
-		return document.getString("IP");
+		Document document = (Document) lockCollection.find(and(eq("type", "child"), eq("lock", lock))).first();
+		return document.getString("ip");
 	}
 
 	public String getParent() {
-		Document document = (Document) lockCollection.find(eq("type", "parent"));
-		return document.getString("IP");
+		Document document = (Document) lockCollection.find(eq("type", "parent")).first();
+		return document.getString("ip");
 	}
 
 	public String addLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count();
-		Document document = new Document("lock", ("lock" + (length))).append("status", "unlocked").append("type", type)
-				.append("ip", ip).append("macadress", mac);
-		lockCollection.insertOne(document);
+		if(lockCollection.find(eq("macadress", mac)).first() == null) {
+			Document document = new Document("lock", ("lock" + (length))).append("status", "unlocked").append("type", type)
+					.append("ip", ip).append("macadress", mac);
+			lockCollection.insertOne(document);
+		} else {
+			lockCollection.findOneAndUpdate(eq("macadress", mac), set("ip", ip));
+		}
 		return "OK";
 	}
 
 	public String addMasterLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count(eq("type", "parent"));
+		System.out.println(length);
 		if (length < 1) {
-			Document document = new Document("lock", "master").append("status", "unlocked").append("type", "parent")
+			Document document = new Document("lock", "parent").append("status", "unlocked").append("type", "parent")
 					.append("ip", ip).append("macadress", mac);
 			lockCollection.insertOne(document);
 			return "OK";

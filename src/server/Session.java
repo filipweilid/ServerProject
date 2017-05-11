@@ -27,7 +27,7 @@ public class Session {
 		///timer.scheduleAtFixedRate(task, 100000, 10000);
 		controller.addKey(key,user);
 		System.out.println(key);
-		timer.schedule(task, 1000*60*3); //3min
+		timer.schedule(task, 1000*60*10); //3min
 	}
 	
 	public String getUser(){

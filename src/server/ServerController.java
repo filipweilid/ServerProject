@@ -107,7 +107,7 @@ public class ServerController {
 		message = data.split(";");
 		String commando = message[0];
 		// 3 fall utan session key, 2 kommer från arduino och vid login
-		if (commando == "login") {
+		if (commando.equals("login")) {
 			String verify = mongodb.verifyLogin(message[1], message[2]);
 			if (verify != "NOTOK") {
 				String key = generateKey(); // genererar en session key
@@ -122,16 +122,16 @@ public class ServerController {
 			} else {
 				sendResponse(verify, socket);
 			}
-		} else if (commando == "hej") {
-			mongodb.addLock(message[1], socket.getInetAddress().toString(), "parent");
+		} else if (commando.equals("hej")) {
+			mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent");
 			sendResponse("Ok from Server!,masterlock added!", socket);
-		} else if (commando == "key") { // någon vred med nyckel
-			logAction("låsnamn", message[2]);
+		} else if (commando.equals("key")) { // någon vred med nyckel
+//			logAction("låsnamn", message[2]);
 			// mongodb.logLockStatus("låsnamn", message[2]);
 			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
 		} else {
-			if (mongodb.checkKey(message[1], message[2]) == "OK") {
-				executeCommando(commando, socket);
+			if (mongodb.checkKey(message[0], message[1]).equals("OK")) {
+				executeCommando(message[2], socket);
 			} else {
 				sendResponse("key not valid!", socket);
 			}
@@ -148,9 +148,9 @@ public class ServerController {
 			// responseMessage =
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
-			responseMessage = arduinocontroller.sendRequest(message[2], message[1]);
-			if (responseMessage == "ok") {
-				logAction("låsnamn", responseMessage);
+			responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
+			if (responseMessage.equals("locked") || responseMessage.equals("unlocked")) {
+				logAction(message[4], responseMessage);
 				sendResponse(responseMessage, socket);
 			} else {
 				// mongodb.logLockStatus(message[1], message[2]);
@@ -161,27 +161,15 @@ public class ServerController {
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
 			String[] macip = responseMessage.split(";");
-			mongodb.addLock(macip[0], macip[1], "child");
+			if(macip.length > 1) {
+				mongodb.addLock(macip[0], macip[1], "child");
+			}
 			System.out.println("message recieve:" + responseMessage);
 			sendResponse("lock added", socket);
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
 			break;
-		case "login":
-			// String verify = mongodb.verifyLogin(message[1], message[2]);
-			// if (verify == "OK") {
-			// String key = generateKey(); //genererar en session key
-			// Session ses = new Session(mongodb, message[1], key);//skapar
-			// timer för keyn
-			// ses.start();
-			// list.add(ses);
-			// sendResponse(verify + ";" + key + ";" , socket); //skickar
-			// tillbaka key + id?
-			// } else {
-			// sendResponse(verify, socket);
-			// }
-			// break;
 		case "logoff":
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getUser() == message[1]) {
@@ -220,7 +208,7 @@ public class ServerController {
 	}
 
 	public void logAction(String lock, String status) {
-		mongodb.logDatabase(lock, socket.getInetAddress().toString(), status);
+//		mongodb.logDatabase(lock, socket.getInetAddress().toString(), status);
 		mongodb.logLockStatus(lock, status);
 	}	
 
