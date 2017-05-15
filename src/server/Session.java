@@ -26,7 +26,6 @@ public class Session {
 
 	public void start(){
 		///timer.scheduleAtFixedRate(task, 100000, 10000);
-		controller.addKey(key,user);
 		System.out.println(key);
 		timer.schedule(task, 1000*60*10); //3min
 	}
@@ -35,7 +34,11 @@ public class Session {
 		return user;
 	}
 	
+	public String getKey(){
+		return this.key;
+	}
+	
 	public void terminate(){
-		controller.removeKey(user);
+		this.key = "default";
 	}
 }
