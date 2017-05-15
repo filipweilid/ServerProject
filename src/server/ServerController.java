@@ -20,6 +20,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
+import java.security.*;
 
 public class ServerController {
 	// private MongoClient mongoClient = new MongoClient("localhost", 27017);
@@ -215,6 +216,9 @@ public class ServerController {
 		UUID id = UUID.randomUUID();
 		String key = id.toString();
 		return key;
+	}
+	
+	private void hash(String password){
 	}
 
 	/*

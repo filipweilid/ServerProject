@@ -1,5 +1,7 @@
 package server;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 public class Mongodbtest {
@@ -10,11 +12,22 @@ public class Mongodbtest {
 		return key;
 	}
 	
-	public static void main(String[] args) {
+	
+	
+	
+	
+	public static void main(String[] args) throws NoSuchAlgorithmException {
 		MongoDBController controller = new MongoDBController();
 		System.out.println(controller.getID("a"));
 		String key = generateKey();
 		new Session(controller, "a", key).start();
 		System.out.println(controller.checkKey(key, "58f60863e9203a13ec26f944"));
+		User user = new User("hej", "hej", "hej");
+		
+//		String test = "testtesttest";
+//		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+//		messageDigest.update(test.getBytes());
+//		String encryptedString = new String(messageDigest.digest());
+//		System.out.println(encryptedString);
 	}
 }
