@@ -58,24 +58,24 @@ public class ServerController {
 																	// keyn
 				ses.start();
 				list.add(ses);
-				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); // skickar
+				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
 				// tillbaka key
 				// + id?
 			} else {
-				sendResponse(verify, socket);
+				sendResponse(verify);
 			}
 		} else if (commando.equals("hej")) {
 			mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent");
-			sendResponse("Ok from Server!,masterlock added!", socket);
+			sendResponse("Ok from Server!,masterlock added!");
 		} else if (commando.equals("key")) { // någon vred med nyckel
 //			logAction("låsnamn", message[2]);
 			// mongodb.logLockStatus("låsnamn", message[2]);
 			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
 		} else {
 			if (mongodb.checkKey(message[0], message[1]).equals("OK")) {
-				executeCommando(message[2], socket);
+				executeCommando(message[2]);
 			} else {
-				sendResponse("key not valid!", socket);
+				sendResponse("key not valid!");
 				try {
 					socket.close();
 				} catch (IOException e) {
@@ -86,11 +86,11 @@ public class ServerController {
 		}
 	}
 
-	public void executeCommando(String commando, Socket socket) {
+	public void executeCommando(String commando) {
 		switch (commando) {
 		case "log":
 //			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
-			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
+			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString());
 			break;
 		case "lock":
 			// responseMessage =
@@ -99,10 +99,10 @@ public class ServerController {
 			responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
 			if (responseMessage.equals("locked") || responseMessage.equals("unlocked")) {
 				logAction(message[4], responseMessage, mongodb.getUsername(message[1]), socket);
-				sendResponse(responseMessage, socket);
+				sendResponse(responseMessage);
 			} else {
 				// mongodb.logLockStatus(message[1], message[2]);
-				sendResponse(responseMessage, socket);
+				sendResponse(responseMessage);
 				System.out.println("responseMessage= " + responseMessage);
 			}
 			break;
@@ -113,10 +113,10 @@ public class ServerController {
 				mongodb.addLock(macip[0], macip[1], "child");
 			}
 			System.out.println("message recieve:" + responseMessage);
-			sendResponse("lock added", socket);
+			sendResponse("lock added");
 			break;
 		case "get":
-			sendResponse(mongodb.fetchLog(), socket);
+			sendResponse(mongodb.fetchLog());
 			break;
 		case "logout":
 			for (int i = 0; i < list.size(); i++) {
@@ -124,22 +124,22 @@ public class ServerController {
 					list.get(i).terminate(); // tar bort sessionkey
 					Session session = list.remove(i); // tar bort
 														// sessionobjektet
-					sendResponse(session.getUser(), socket);
+					sendResponse(session.getUser());
 				}
 			}
-			sendResponse("nyckel borta", socket);
+			sendResponse("nyckel borta");
 			break;
 		case "status":
-			sendResponse(mongodb.getLockStatus(), socket);
+			sendResponse(mongodb.getLockStatus());
 			break;
 		case "create":
-			sendResponse(mongodb.createUser(message[3], message[4], message[5]), socket);
+			sendResponse(mongodb.createUser(message[3], message[4], message[5]));
 			break;
 		case "delete":
-			sendResponse(mongodb.removeUser(message[3]), socket);
+			sendResponse(mongodb.removeUser(message[3]));
 			break;
 		case "user":
-			sendResponse(mongodb.getUsers(), socket);
+			sendResponse(mongodb.getUsers());
 			break;
 		case "hej":
 			// mongodb.addLock(message[1], socket.getInetAddress().toString(),
@@ -147,10 +147,10 @@ public class ServerController {
 			// sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
-			sendResponse("la till logg", socket);
+			sendResponse("la till logg");
 			break;
 		default:
-			sendResponse("Server couldnt process the data", socket);
+			sendResponse("Server couldnt process the data");
 			break;
 		}
 	}
@@ -170,12 +170,12 @@ public class ServerController {
 	/*
 	 * Creates and sends a response
 	 */
-	public void sendResponse(String message, Socket socket) {
+	public void sendResponse(String message) {
 		try {
 			OutputStream os = socket.getOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(os);
 			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(message);
+			bw.write(message + "\n");
 			System.out.println("Message sent to the client is :" + "\n" + message);
 			bw.flush();
 		} catch (IOException e) {

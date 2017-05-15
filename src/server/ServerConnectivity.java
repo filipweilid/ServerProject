@@ -50,15 +50,25 @@ public class ServerConnectivity {
 		}
 
 		public void run() {
-			while (socket.isConnected()) {
+			while (!socket.isClosed()) {
 				try {
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 					String data = br.readLine();
-					controller.processData(data, socket);
+					if(data == null) {
+						socket.close();
+					} else {
+						controller.processData(data, socket);
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
