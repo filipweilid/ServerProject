@@ -3,14 +3,13 @@ package server;
 public class User {
 	private String username;
 	private String password;
-	private String sessionkey;
+	private Session session;
 	private String role;
 	
 	public User(String username, String password, String role){
 		this.username = username;
 		this.password = password;
 		this.role = role;
-		this.sessionkey = "default";
 	}
 	
 	public String getUsername(){
@@ -29,7 +28,11 @@ public class User {
 		return "";
 	}
 	
-	public void setSessionkey(String sessionkey){
-		this.sessionkey = sessionkey;
+	public void setSession(Session session){
+		this.session = session;
+	}
+	
+	public String getKey(){
+		return session.getKey();
 	}
 }
