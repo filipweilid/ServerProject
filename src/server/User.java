@@ -33,6 +33,6 @@ public class User {
 	}
 	
 	public String getKey(){
-		return session.getKey();
+		return "test";
 	}
 }
