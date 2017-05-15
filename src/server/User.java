@@ -6,12 +6,8 @@ import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
 
-public class User extends Document {
+public class User extends BasicDBObject {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
 	private Session session;
@@ -22,9 +18,9 @@ public class User extends Document {
 		this.username = username;
 		this.password = password;
 		this.role = role;
-		put("username", username);
-		put("password", password);
-		put("role", role);
+		append("username", username);
+		append("password", password);
+		append("role", role);
 	}
 	
 	public String getUsername(){
