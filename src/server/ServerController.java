@@ -37,72 +37,14 @@ public class ServerController {
 	private String responseMessage;
 	private String[] message;
 	private ArrayList<Session> list = new ArrayList<Session>();
+	private Socket socket;
 
 	public ServerController() {
 		new ServerConnectivity(25000, this);
 	}
 
-	// public void proccesData(String data, Socket socket) {
-	// message = data.split(";");
-	//
-	// if (message[0].equals("log")) {
-	// // skriv till databas här
-	// mongodb.logDatabase(message[1], socket.getInetAddress().toString(),
-	// message[2]);
-	// // addLog(message[1], socket.getInetAddress().toString(),
-	// // message[2]);
-	// sendResponse("Logged action for " + message[1] + " by: " +
-	// socket.getInetAddress().toString(), socket);
-	// } else if (message[0].equals("lock")) {
-	//
-	// responseMessage =
-	// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
-	// message[2]);
-	// // skriv till databas här
-	// mongodb.logLockStatus(message[1], message[2]);
-	// sendResponse(responseMessage, socket);
-	//
-	// } else if (message[0].equals("scan")) {
-	// responseMessage = arduinocontroller.sendRequest("255.255.255.255",
-	// message[1]);
-	// mongodb.addLock(responseMessage);
-	// sendResponse(responseMessage, socket);
-	// }
-	//
-	// else if (message[0].equals("get")) {
-	//
-	// // hämta från databas och skickar
-	// sendResponse(mongodb.fetchLog(), socket);
-	// }
-	//
-	// else if (message[0].equals("login")) {
-	// // hämta från databas här
-	// sendResponse(mongodb.verifyLogin(message[1], message[2]), socket);
-	// }
-	//
-	// else if (message[0].equals("status")) {
-	// sendResponse(mongodb.getLockStatus(), socket);
-	// }
-	//
-	// else if (message[0].equals("create")) {
-	// sendResponse(mongodb.createUser(message[1], message[2], message[3]),
-	// socket);
-	// }
-	//
-	// else if (message[0].equals("delete")) {
-	// sendResponse(mongodb.removeUser(message[1]), socket);
-	// }
-	//
-	// else if (message[0].equals("users")) {
-	// sendResponse(mongodb.getUsers(), socket);
-	//
-	// } else {
-	// sendResponse("Server couldnt process the data", socket);
-	// }
-	// }
-
 	public void processData(String data, Socket socket) {
-		// this.socket = socket;
+		this.socket = socket;
 		System.out.println("Message is: " + data);
 		message = data.split(";");
 		String commando = message[0];
@@ -134,6 +76,12 @@ public class ServerController {
 				executeCommando(message[2], socket);
 			} else {
 				sendResponse("key not valid!", socket);
+				try {
+					socket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -170,7 +118,7 @@ public class ServerController {
 		case "get":
 			sendResponse(mongodb.fetchLog(), socket);
 			break;
-		case "logoff":
+		case "logout":
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getUser() == message[1]) {
 					list.get(i).terminate(); // tar bort sessionkey
@@ -218,9 +166,7 @@ public class ServerController {
 		return key;
 	}
 	
-	private void hash(String password){
-	}
-
+	
 	/*
 	 * Creates and sends a response
 	 */
@@ -234,11 +180,6 @@ public class ServerController {
 			bw.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				socket.close();
-			} catch (Exception e) {
-			}
 		}
 	}
 
