@@ -53,11 +53,8 @@ public class ServerController {
 			String verify = mongodb.verifyLogin(message[1], message[2]);
 			if (verify != "NOTOK") {
 				String key = generateKey(); // genererar en session key
-				Session ses = new Session(mongodb, message[1], key);// skapar
-																	// timer för
-																	// keyn
+				Session ses = new Session(mongodb, message[1], key);// skapar timer för keyn
 				ses.start();
-				list.add(ses);
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
 				// tillbaka key
 				// + id?
@@ -117,17 +114,6 @@ public class ServerController {
 			break;
 		case "get":
 			sendResponse(mongodb.fetchLog());
-			break;
-		case "logout":
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).getUser() == message[1]) {
-					list.get(i).terminate(); // tar bort sessionkey
-					Session session = list.remove(i); // tar bort
-														// sessionobjektet
-					sendResponse(session.getUser());
-				}
-			}
-			sendResponse("nyckel borta");
 			break;
 		case "status":
 			sendResponse(mongodb.getLockStatus());
