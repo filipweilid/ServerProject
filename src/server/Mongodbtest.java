@@ -24,25 +24,26 @@ public class Mongodbtest {
 	MongoCollection<Document> userCollection = database.getCollection("users");
 	
 	public void test(){
-		User user1 = new User("hej", "hej", "hej");
+		User user1 = new User();
+		user1.setUsername("testing");
 		Gson gson = new Gson();
-	    String json = gson.toJson(user1);
+		final String json = gson.toJson(user1);
 	    System.out.println("json stringen = "+ json);
 	    // Parse to bson document and insert
 	   // Document doc = Document.parse(json);
 	    
-	   Document doc = Document.parse(json);
-	   System.out.println(doc.toString());
+//	   Document doc = Document.parse(json);
+//	   System.out.println(doc.toString());
 	   //Document test = (Document) new Document().put("test", gson.toJson(user1));
 	    
-	   userCollection.insertOne(doc);
-	   Document document2 = userCollection.find().first();
-	   User user = (User) new Gson().fromJson(document2.toJson(), User.class);
-	   System.out.println(document2.toString()+ " = document2 to string");
-	   String jsontest = document2.toJson();
-	   System.out.print(jsontest);
-	   User test = gson.fromJson(jsontest, User.class);
-	   System.out.println(test.getUsername());
+//	   userCollection.insertOne(doc);
+//	   Document document2 = userCollection.find().first();
+//	   User user = (User) new Gson().fromJson(document2.toJson(), User.class);
+//	   System.out.println(document2.toString()+ " = document2 to string");
+//	   String jsontest = document2.toJson();
+//	   System.out.print(jsontest);
+//	   User test = gson.fromJson(jsontest, User.class);
+//	   System.out.println(test.getUsername());
 	   // gson.fromJson(document2.toJson(), User.class).toString();
 	   // System.out.println(user2.getUsername());
 	    
