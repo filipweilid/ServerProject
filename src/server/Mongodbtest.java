@@ -94,9 +94,13 @@ public class Mongodbtest {
 	MongoDBController test = new MongoDBController();
 	SessionManager sessionManager = new SessionManager(test);
 	test.createUser("test", hashPassword("hejhej"), "admin");
+	test.createUser("filippleb", hashPassword("testtest"), "pleb");
 	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
+	System.out.println(test.verifyLogin("filippleb", hashPassword("testtest")));
 	String testare =  "placeholder";
+	String testare2 = "filipärpleb";
 	sessionManager.start(testare, "test");
+	sessionManager.start(testare2, "filippleb");
 //		System.out.println(controller.getID("a"));
 //		String key = generateKey();
 //		new Session(controller, "a", key).start();

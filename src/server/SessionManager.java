@@ -38,6 +38,7 @@ public class SessionManager {
 	public void terminate(String user) {
 		controller.removeKey(user);
 		System.out.println(removeUserSession(user).getUser());
+		System.out.println(sessionTasks.size());
 	}
 
 
