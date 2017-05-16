@@ -25,20 +25,10 @@ import static com.mongodb.client.model.Updates.*;
 import java.security.*;
 
 public class ServerController {
-	// private MongoClient mongoClient = new MongoClient("localhost", 27017);
-	// private MongoDatabase database = mongoClient.getDatabase("test");
-	// private MongoCollection<Document> logCollection =
-	// database.getCollection("log");
-	// private MongoCollection<Document> lockCollection =
-	// database.getCollection("lockStatus");
-	// private MongoCollection<Document> userCollection =
-	// database.getCollection("users");
-	// private ServerConnectivity test;
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
 	private String[] message;
-	private SessionManager session;
 	private Socket socket;
 	private SessionManager sessionManager = new SessionManager(mongodb);
 	public ServerController() {
