@@ -21,7 +21,7 @@ import com.mongodb.client.MongoDatabase;
  * Class that handles the database
  */
 public class MongoDBController {
-	private MongoClient mongoClient = new MongoClient("10.2.29.18", 27017);
+	private MongoClient mongoClient = new MongoClient("localhost", 27017);
 	private MongoDatabase database = mongoClient.getDatabase("test");
 	private MongoCollection<Document> logCollection = database.getCollection("log");
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");

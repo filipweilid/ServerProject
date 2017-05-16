@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
@@ -50,10 +52,12 @@ public class ServerController {
 		String commando = message[0];
 		// 3 fall utan session key, 2 kommer från arduino och vid login
 		if (commando.equals("login")) {
-			String verify = mongodb.verifyLogin(message[1], message[2]);
+			String verify = mongodb.verifyLogin(message[1], hashPassword(message[2]));
 			if (verify != "NOTOK") {
 				String key = generateKey(); // genererar en session key
-				Session ses = new Session(mongodb, message[1], key);// skapar timer för keyn
+				Session ses = new Session(mongodb, message[1], key);// skapar
+																	// timer för
+																	// keyn
 				ses.start();
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
 				// tillbaka key
@@ -65,7 +69,7 @@ public class ServerController {
 			mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent");
 			sendResponse("Ok from Server!,masterlock added!");
 		} else if (commando.equals("key")) { // någon vred med nyckel
-//			logAction("låsnamn", message[2]);
+			// logAction("låsnamn", message[2]);
 			// mongodb.logLockStatus("låsnamn", message[2]);
 			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
 		} else {
@@ -86,7 +90,8 @@ public class ServerController {
 	public void executeCommando(String commando) {
 		switch (commando) {
 		case "log":
-//			mongodb.logDatabase(message[1], socket.getInetAddress().toString(), message[2]);
+			// mongodb.logDatabase(message[1],
+			// socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString());
 			break;
 		case "lock":
@@ -106,7 +111,7 @@ public class ServerController {
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
 			String[] macip = responseMessage.split(";");
-			if(macip.length > 1) {
+			if (macip.length > 1) {
 				mongodb.addLock(macip[0], macip[1], "child");
 			}
 			System.out.println("message recieve:" + responseMessage);
@@ -119,7 +124,7 @@ public class ServerController {
 			sendResponse(mongodb.getLockStatus());
 			break;
 		case "create":
-			sendResponse(mongodb.createUser(message[3], message[4], message[5]));
+			sendResponse(mongodb.createUser(message[3], hashPassword(message[4]), message[5]));
 			break;
 		case "delete":
 			sendResponse(mongodb.removeUser(message[3]));
@@ -151,8 +156,21 @@ public class ServerController {
 		String key = id.toString();
 		return key;
 	}
-	
-	
+
+	public String hashPassword(String password) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+			String encoded = Base64.getEncoder().encodeToString(hash);
+			return encoded;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
+
 	/*
 	 * Creates and sends a response
 	 */

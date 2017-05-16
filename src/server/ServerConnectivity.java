@@ -25,17 +25,10 @@ public class ServerConnectivity {
 		try {
 			// Server is running always. This is done using this while(true)
 			ServerSocket serverSocket = new ServerSocket(port);
-			// loop
 			while (true) {
-				// Reading the message from the client
-				Socket socket = serverSocket.accept();
+				Socket socket = serverSocket.accept(); //blocks
 				System.out.println(socket.getInetAddress().toString() + " connected");
-				new Thread(new clientThread(socket)).start(); // starts new
-																// thread
-				// BufferedReader br = new BufferedReader(new
-				// InputStreamReader(socket.getInputStream(), "UTF-8"));
-				// String data = br.readLine();
-				// controller.processData(data, socket); // serverControllern
+				new Thread(new clientThread(socket)).start(); // starts new thread
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,14 +53,12 @@ public class ServerConnectivity {
 						controller.processData(data, socket);
 					}
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			try {
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -1,7 +1,9 @@
 package server;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.UUID;
 
 
@@ -24,6 +26,19 @@ public class Mongodbtest {
 	MongoCollection<Document> userCollection = database.getCollection("users");
 	
 	public void test(){
+//		String test = "";
+//		MessageDigest digest;
+//		try {
+//			digest = MessageDigest.getInstance("SHA-256");
+//			byte[] hash = digest.digest(test.getBytes(StandardCharsets.UTF_8));
+//			String encoded = Base64.getEncoder().encodeToString(hash);
+//			System.out.println(encoded);
+//		} catch (NoSuchAlgorithmException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		
 		User user1 = new User("Viktor Kullberg", "test1234", "king");
 //		user1.setUsername("Viktor Kullberg);
 		Gson gson = new Gson();
@@ -36,10 +51,10 @@ public class Mongodbtest {
 	   System.out.println(doc.toString());
 	   //Document test = (Document) new Document().put("test", gson.toJson(user1));
 	    
-	   userCollection.insertOne(doc);
-	   Document document2 = userCollection.find().first();
-	   User user = (User) new Gson().fromJson(document2.toJson(), User.class);
-	   System.out.println(user.testing());
+	  // userCollection.insertOne(doc);
+	   //Document document2 = userCollection.find().first();
+	  // User user = (User) new Gson().fromJson(document2.toJson(), User.class);
+	   System.out.println(user1.testing());
 //	   System.out.println(document2.toString()+ " = document2 to string");
 //	   String jsontest = document2.toJson();
 //	   System.out.print(jsontest);
@@ -57,16 +72,32 @@ public class Mongodbtest {
 		return key;
 	}
 	
+	public static String hashPassword(String password) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+			String encoded = Base64.getEncoder().encodeToString(hash);
+			return encoded;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
+	
 	
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-	Mongodbtest test = new Mongodbtest();
+	//Mongodbtest test = new Mongodbtest();
+	MongoDBController test = new MongoDBController();
+	test.createUser("test", hashPassword("hejhej"), "admin");
+	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
 //		System.out.println(controller.getID("a"));
 //		String key = generateKey();
 //		new Session(controller, "a", key).start();
 //		System.out.println(controller.checkKey(key, "58f60863e9203a13ec26f944"));
 //		User user = new User("hej", "hej", "hej");
-		test.test();
 		
 		
 		
