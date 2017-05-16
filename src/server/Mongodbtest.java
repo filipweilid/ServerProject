@@ -89,11 +89,14 @@ public class Mongodbtest {
 	
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-	Mongodbtest test = new Mongodbtest();
-	test.test();
-//	MongoDBController test = new MongoDBController();
-//	test.createUser("test", hashPassword("hejhej"), "admin");
-//	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
+//	Mongodbtest test = new Mongodbtest();
+//	test.test();
+	MongoDBController test = new MongoDBController();
+	SessionManager sessionManager = new SessionManager(test);
+	test.createUser("test", hashPassword("hejhej"), "admin");
+	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
+	String testare =  "placeholder";
+	sessionManager.start(testare, "test");
 //		System.out.println(controller.getID("a"));
 //		String key = generateKey();
 //		new Session(controller, "a", key).start();

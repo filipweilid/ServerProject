@@ -38,9 +38,9 @@ public class ServerController {
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
 	private String[] message;
-	private Session session;
+	private SessionManager session;
 	private Socket socket;
-
+	private SessionManager sessionManager = new SessionManager(mongodb);
 	public ServerController() {
 		new ServerConnectivity(25000, this);
 	}
@@ -55,10 +55,9 @@ public class ServerController {
 			String verify = mongodb.verifyLogin(message[1], hashPassword(message[2]));
 			if (!verify.equals("NOTOK")) {
 				String key = generateKey(); // genererar en session key
-				Session ses = new Session(mongodb, message[1], key);// skapar
-																	// timer för
-																	// keyn
-				ses.start();
+				//SessionManager ses = new SessionManager(mongodb, message[1], key);// skapar
+				sessionManager.start(key, message[1]);												// timer för
+																	// key
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
 				// tillbaka key
 				// + id
