@@ -53,7 +53,7 @@ public class ServerController {
 		// 3 fall utan session key, 2 kommer från arduino och vid login
 		if (commando.equals("login")) {
 			String verify = mongodb.verifyLogin(message[1], hashPassword(message[2]));
-			if (verify != "NOTOK") {
+			if (!verify.equals("NOTOK")) {
 				String key = generateKey(); // genererar en session key
 				Session ses = new Session(mongodb, message[1], key);// skapar
 																	// timer för
