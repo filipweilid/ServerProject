@@ -24,7 +24,7 @@ public class SessionManager {
 		timer.schedule(task, 1000 * 30 * 1); // 3min
 	}
 
-	public SessionTask removeUserSession(String user) {
+	private SessionTask removeUserSession(String user) {
 		for(int i = 0; i < sessionTasks.size(); i++){
 			if(sessionTasks.get(i).getUser().equals(user)){
 				sessionTasks.get(i).cancel();

@@ -6,8 +6,6 @@ import java.net.*;
 //SERVERN SOM LYSSNAR PÅ INKOMMANDE TRAFIK OCH ANVÄNDER SERVERCONTROLLER FÖR 
 //ATT VETA VAD SOM SKA SKE
 public class ServerConnectivity {
-	// private Socket socket;
-	// private ServerGUI gui;
 	private ServerController controller;
 	private int port;
 
@@ -37,6 +35,7 @@ public class ServerConnectivity {
 
 	private class clientThread implements Runnable {
 		private Socket socket;
+		private String user;
 
 		public clientThread(Socket socket) {
 			this.socket = socket;
@@ -47,10 +46,14 @@ public class ServerConnectivity {
 				try {
 					BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 					String data = br.readLine();
-					if(data == null) {
+					if(data == null) { //socket closed, loggade ut eller avbröts
 						socket.close();
+						controller.endConnection(user);
 					} else {
-						controller.processData(data, socket);
+						String user = controller.processData(data, socket);
+						if(!user.equals("")){
+							this.user = user;
+						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

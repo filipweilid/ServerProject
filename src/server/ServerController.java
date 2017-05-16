@@ -45,7 +45,7 @@ public class ServerController {
 		new ServerConnectivity(25000, this);
 	}
 
-	public void processData(String data, Socket socket) {
+	public String processData(String data, Socket socket) {
 		this.socket = socket;
 		System.out.println("Message is: " + data);
 		message = data.split(";");
@@ -57,8 +57,8 @@ public class ServerController {
 				String key = generateKey(); // genererar en session key
 				//SessionManager ses = new SessionManager(mongodb, message[1], key);// skapar
 				sessionManager.start(key, message[1]);												// timer för
-																	// key
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
+				return message[1];
 				// tillbaka key
 				// + id
 			} else {
@@ -84,6 +84,7 @@ public class ServerController {
 				}
 			}
 		}
+		return "";
 	}
 
 	public void executeCommando(String commando) {
@@ -148,6 +149,10 @@ public class ServerController {
 	public void logAction(String lock, String status, String username, Socket socket) {
 		mongodb.logDatabase(status, socket.getInetAddress().toString().substring(1), username, lock);
 		mongodb.logLockStatus(lock, status);
+	}
+	
+	public void endConnection(String user){
+		sessionManager.terminate(user);
 	}
 
 	private String generateKey() {

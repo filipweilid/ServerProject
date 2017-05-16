@@ -91,7 +91,7 @@ public class MongoDBController {
 	}
 
 	public String checkKey(String key, String id) {
-		if(key.equals("default")){ //hack
+		if(key.equals("default") || (id.length()!=24)){ //hack
 			return "NOTOK";
 		}
 		ObjectId object = new ObjectId(id);
