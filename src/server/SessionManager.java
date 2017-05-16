@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-
+/*
+ * Hanndles the user sessions
+ */
 public class SessionManager {
-
+	
 	private MongoDBController controller;
 	private Timer timer = new Timer();
 	private ArrayList<SessionTask> sessionTasks = new ArrayList<SessionTask>();
@@ -16,7 +18,6 @@ public class SessionManager {
 	}
 
 	public void start(String key, String user) {
-		/// timer.scheduleAtFixedRate(task, 100000, 10000);
 		controller.addKey(key, user);
 		System.out.println(key);
 		SessionTask task = new SessionTask(user);
