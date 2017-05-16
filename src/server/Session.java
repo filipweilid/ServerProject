@@ -14,7 +14,7 @@ public class Session {
 		this.controller = controller;
 		this.user = user;
 		this.key = key;
-	}
+	}	
 	
 	private Timer timer = new Timer();
 	TimerTask task = new TimerTask(){
@@ -31,8 +31,8 @@ public class Session {
 		timer.schedule(task, 1000*30*1); //3min
 	}
 	
-	public String getUser(){
-		return user;
+	public void findUser(String user){
+		
 	}
 	
 	public void terminate(){

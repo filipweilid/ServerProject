@@ -38,7 +38,7 @@ public class ServerController {
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private String responseMessage;
 	private String[] message;
-	private ArrayList<Session> list = new ArrayList<Session>();
+	private Session session;
 	private Socket socket;
 
 	public ServerController() {
@@ -61,7 +61,7 @@ public class ServerController {
 				ses.start();
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1])); // skickar
 				// tillbaka key
-				// + id?
+				// + id
 			} else {
 				sendResponse(verify);
 			}

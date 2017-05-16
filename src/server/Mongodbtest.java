@@ -51,7 +51,7 @@ public class Mongodbtest {
 	   System.out.println(doc.toString());
 	   //Document test = (Document) new Document().put("test", gson.toJson(user1));
 	    
-	  // userCollection.insertOne(doc);
+	  userCollection.insertOne(doc);
 	   //Document document2 = userCollection.find().first();
 	  // User user = (User) new Gson().fromJson(document2.toJson(), User.class);
 	   System.out.println(user1.testing());
@@ -89,10 +89,11 @@ public class Mongodbtest {
 	
 	
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-	//Mongodbtest test = new Mongodbtest();
-	MongoDBController test = new MongoDBController();
-	test.createUser("test", hashPassword("hejhej"), "admin");
-	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
+	Mongodbtest test = new Mongodbtest();
+	test.test();
+//	MongoDBController test = new MongoDBController();
+//	test.createUser("test", hashPassword("hejhej"), "admin");
+//	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
 //		System.out.println(controller.getID("a"));
 //		String key = generateKey();
 //		new Session(controller, "a", key).start();
