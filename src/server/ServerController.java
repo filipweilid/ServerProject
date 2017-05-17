@@ -130,6 +130,10 @@ public class ServerController {
 		case "key":
 			sendResponse("la till logg");
 			break;
+		case "ping":
+			
+			
+			break;
 		default:
 			sendResponse("Server couldnt process the data");
 			break;
