@@ -16,6 +16,7 @@ import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
 
 /*
  * Class that handles the database
@@ -159,6 +160,22 @@ public class MongoDBController {
 			lockCollection.findOneAndUpdate(eq("macadress", mac), set("ip", ip));
 		}
 		return "OK";
+	}
+	
+	public String editLock(String oldLock, String newLock) {
+		lockCollection.findOneAndUpdate(eq("lock", oldLock), set("lock", newLock));
+		
+		return "OK";
+	}
+	
+	public String editUser(String oldUsername, String newUsername, String password, String role) {
+		if (userCollection.find(eq("username", oldUsername)).first() != null) {
+			Document document = new Document("username", newUsername).append("password", password).append("role", role)
+					.append("sessionkey", "default");
+			userCollection.findOneAndReplace(eq("username", oldUsername), document);
+			return "OK";
+		}
+		return "NOTOK";
 	}
 
 	public String addMasterLock(String mac, String ip, String type) {

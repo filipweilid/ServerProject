@@ -123,10 +123,11 @@ public class ServerController {
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
 			break;
-		case "hej":
-			// mongodb.addLock(message[1], socket.getInetAddress().toString(),
-			// "parent");
-			// sendResponse("Ok from Server!,masterlock added!", socket);
+		case "editUser":
+			sendResponse(mongodb.editUser(message[3], message[4], hashPassword(message[5]), message[6]), socket);
+			break;
+		case "editLock":
+			sendResponse(mongodb.editLock(message[3], message[4]), socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);
