@@ -18,7 +18,6 @@ import java.util.UUID;
 
 public class ArduinoController {
 	private MongoDBController mongodb;
-	private Socket socket;
 	private String returnMessage;
 	
 	public ArduinoController(MongoDBController controller){
@@ -27,7 +26,7 @@ public class ArduinoController {
 	
 	public String sendRequest(String lockname, String command){
 		try {
-			socket = new Socket(mongodb.getParent(), 8888);
+			Socket socket = new Socket(mongodb.getParent(), 8888);
 			//socket = new Socket(mongodb.getParent(), 8888);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			//bw.write(createMessage(internalIP, command));
@@ -36,15 +35,11 @@ public class ArduinoController {
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			returnMessage = br.readLine();
 			br.close();
+			socket.close();
+			return returnMessage;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			try {
-				socket.close();
-				return returnMessage;
-			} catch (Exception e) {
-			}
 		}
 		return "error";
 	}

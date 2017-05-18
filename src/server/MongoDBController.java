@@ -169,6 +169,9 @@ public class MongoDBController {
 					.append("ip", ip).append("macadress", mac);
 			lockCollection.insertOne(document);
 			return "OK";
+		} else if(lockCollection.find(eq("macadress", mac)) != null) {
+			lockCollection.findOneAndUpdate(eq("macadress", mac), set("ip", ip));
+			return "OK";
 		}
 		return "NOTOK";
 	}

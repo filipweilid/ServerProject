@@ -48,7 +48,9 @@ public class ServerConnectivity {
 					String data = br.readLine();
 					if(data == null) { //socket closed, loggade ut eller avbröts
 						socket.close();
-						controller.endConnection(user);
+						if(user != null) { //kollar om det är ett lås
+							controller.endConnection(user);
+						}
 					} else {
 						String user = controller.processData(data, socket);
 						if(!user.equals("")){
