@@ -22,7 +22,7 @@ public class SessionManager {
 		System.out.println(key);
 		SessionTask task = new SessionTask(user);
 		sessionTasks.add(task);
-		timer.schedule(task, 1000 * 60 * 10); // 10min
+		timer.schedule(task, 1000 * 60 * 1); // 10min
 	}
 
 	private SessionTask removeUserSession(String user) {

@@ -42,9 +42,10 @@ public class ServerController {
 			if (!verify.equals("NOTOK")) {
 				String key = generateKey(); // genererar en session key
 				//SessionManager ses = new SessionManager(mongodb, message[1], key);// skapar
-				sessionManager.start(key, message[1]);												// timer för
+				sessionManager.start(key, mongodb.getID(message[1]));												// timer för
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); // skickar
-				return message[1];
+				//return message[1];
+				return mongodb.getID(message[1]);
 				// tillbaka key
 				// + id
 			} else {
@@ -58,7 +59,7 @@ public class ServerController {
 			// mongodb.logLockStatus("låsnamn", message[2]);
 			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
 		} else {
-			if (mongodb.checkKey(message[0], message[1]).equals("OK")) {
+			if (message.length > 1 && mongodb.checkKey(message[0], message[1]).equals("OK")) {
 				executeCommando(message[2], socket, message);
 			} else {
 				sendResponse("key not valid!", socket);
@@ -123,11 +124,10 @@ public class ServerController {
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
 			break;
-		case "editUser":
-			sendResponse(mongodb.editUser(message[3], message[4], hashPassword(message[5]), message[6]), socket);
-			break;
-		case "editLock":
-			sendResponse(mongodb.editLock(message[3], message[4]), socket);
+		case "hej":
+			// mongodb.addLock(message[1], socket.getInetAddress().toString(),
+			// "parent");
+			// sendResponse("Ok from Server!,masterlock added!", socket);
 			break;
 		case "key":
 			sendResponse("la till logg", socket);

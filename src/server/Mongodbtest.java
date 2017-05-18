@@ -39,7 +39,7 @@ public class Mongodbtest {
 //		}
 		
 		
-		User user1 = new User("Viktor Kullberg", "test1234", "king");
+		//User user1 = new User("Viktor Kullberg", "test1234", "king");
 //		user1.setUsername("Viktor Kullberg);
 		Gson gson = new Gson();
 		String json = gson.toJson(user1);
@@ -54,7 +54,7 @@ public class Mongodbtest {
 	  userCollection.insertOne(doc);
 	   //Document document2 = userCollection.find().first();
 	  // User user = (User) new Gson().fromJson(document2.toJson(), User.class);
-	   System.out.println(user1.testing());
+	   //System.out.println(user1.testing());
 //	   System.out.println(document2.toString()+ " = document2 to string");
 //	   String jsontest = document2.toJson();
 //	   System.out.print(jsontest);

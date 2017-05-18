@@ -84,11 +84,13 @@ public class MongoDBController {
 	}
 
 	public void addKey(String key, String username) {
-		userCollection.updateOne(eq("username", username), set("sessionkey", key));
+		ObjectId object = new ObjectId(username);
+		userCollection.updateOne(eq("_id", object), set("sessionkey", key));
 	}
 
 	public void removeKey(String username) {
-		userCollection.updateOne(eq("username", username), set("sessionkey", "default"));
+		ObjectId object = new ObjectId(username);
+		userCollection.updateOne(eq("_id", object), set("sessionkey", "default"));
 	}
 
 	public String checkKey(String key, String id) {
