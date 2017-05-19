@@ -179,7 +179,6 @@ public class MongoDBController {
 			return "NOTOK";
 		}
 		lockCollection.findOneAndUpdate(eq("lock", oldLock), set("lock", newLock));
-		
 		return "OK";
 	}
 	
