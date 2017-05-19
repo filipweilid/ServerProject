@@ -161,7 +161,7 @@ public class MongoDBController {
 	public String addLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count();
 		if(lockCollection.find(eq("macadress", mac)).first() == null) {
-			Document document = new Document("lock", ("lock" + (length))).append("status", "unlocked").append("type", type)
+			Document document = new Document("lock", ("lock" + (length))).append("status", "locked").append("type", type)
 					.append("ip", ip).append("macadress", mac).append("active", true);
 			lockCollection.insertOne(document);
 		} else {
@@ -175,12 +175,18 @@ public class MongoDBController {
 	}
 	
 	public String editLock(String oldLock, String newLock) {
+		if(newLock.length() > 10){ //för långa namn buggar appen
+			return "NOTOK";
+		}
 		lockCollection.findOneAndUpdate(eq("lock", oldLock), set("lock", newLock));
 		
 		return "OK";
 	}
 	
 	public String editUser(String oldUsername, String newUsername, String password, String role) {
+		if(newUsername.length() > 10){ //för långa namn buggar appen
+			return "NOTOK";
+		}
 		if (userCollection.find(eq("username", oldUsername)).first() != null) {
 			Document document = new Document("username", newUsername).append("password", password).append("role", role)
 					.append("sessionkey", "default");
@@ -211,6 +217,9 @@ public class MongoDBController {
 	 * creates new user
 	 */
 	public String createUser(String username, String password, String role) {
+		if(username.length()> 10){
+			return "NOTOK";
+		}
 		if (userCollection.find(eq("username", username)).first() == null) {
 			Document document = new Document("username", username).append("password", password).append("role", role)
 					.append("sessionkey", "default");
