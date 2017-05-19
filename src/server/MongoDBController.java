@@ -187,8 +187,9 @@ public class MongoDBController {
 			return "NOTOK";
 		}
 		if (userCollection.find(eq("username", oldUsername)).first() != null) {
+			String key = userCollection.find(eq("username", oldUsername)).first().getString("sessionkey"); //hämtar gamla sessionkeyn så 
 			Document document = new Document("username", newUsername).append("password", password).append("role", role)
-					.append("sessionkey", "default");
+					.append("sessionkey", key);
 			userCollection.findOneAndReplace(eq("username", oldUsername), document);
 			return "OK";
 		}
