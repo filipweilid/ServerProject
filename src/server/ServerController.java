@@ -83,6 +83,7 @@ public class ServerController {
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
+			System.out.println(message[4]);
 			// responseMessage =
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
@@ -93,7 +94,7 @@ public class ServerController {
 				logAction(message[4], "unlocked", mongodb.getUsername(message[1]), socket);
 			} else if(responseMessage.equals("The door is already locked")) {
 				logAction(message[4], "locked", mongodb.getUsername(message[1]), socket);
-			} else if(responseMessage.equals("")) {
+			} else if(responseMessage.equals("error")) {
 				//timeout
 				mongodb.changeActiveStatus(mongodb.getMac(message[4]), false); //låset har timeat ut;
 				// mongodb.logLockStatus(message[1], message[2]);
@@ -128,11 +129,12 @@ public class ServerController {
 		case "user":
 			sendResponse(mongodb.getUsers(), socket);
 			break;
-		case "hej":
-			// mongodb.addLock(message[1], socket.getInetAddress().toString(),
-			// "parent");
-			// sendResponse("Ok from Server!,masterlock added!", socket);
-			break;
+		case "editUser":
+			 sendResponse(mongodb.editUser(message[3], message[4], hashPassword(message[5]), message[6]), socket);
+			 break;
+		case "editLock":
+			 sendResponse(mongodb.editLock(message[3], message[4]), socket);
+			 break;
 		case "key":
 			sendResponse("la till logg", socket);
 			break;

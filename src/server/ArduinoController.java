@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.UUID;
 
@@ -26,7 +27,8 @@ public class ArduinoController {
 	
 	public String sendRequest(String lockname, String command){
 		try {
-			Socket socket = new Socket(mongodb.getParent(), 8888);
+			Socket socket = new Socket();
+			socket.connect(new InetSocketAddress(mongodb.getParent(), 8888), 10000);
 			//socket = new Socket(mongodb.getParent(), 8888);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			//bw.write(createMessage(internalIP, command));
@@ -37,11 +39,9 @@ public class ArduinoController {
 			br.close();
 			socket.close();
 			return returnMessage;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch(Exception e) {
+			return "error";
 		}
-		return "error";
 	}
 	
 	public String createMessage(String ip, String message){

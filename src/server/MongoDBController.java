@@ -138,7 +138,7 @@ public class MongoDBController {
 		while (iter.hasNext()) {
 			Document document = iter.next();
 			returnmessage = returnmessage + document.getString("lock") + ";" + document.getString("status") + ";" +
-			document.getBoolean("active");
+			document.getBoolean("active") + ";";
 		}
 		return returnmessage;
 	}
@@ -170,10 +170,8 @@ public class MongoDBController {
 		return "OK";
 	}
 	
-	public void changeActiveStatus(String lockname, Boolean ActiveStatus){{
-		lockCollection.findOneAndUpdate(eq("lock", lockname), set("active", ActiveStatus));
-	}
-		
+	public void changeActiveStatus(String mac, Boolean ActiveStatus) {
+		lockCollection.findOneAndUpdate(eq("macadress", mac), set("active", ActiveStatus));
 	}
 	
 	public String editLock(String oldLock, String newLock) {
