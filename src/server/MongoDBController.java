@@ -137,7 +137,8 @@ public class MongoDBController {
 		String returnmessage = "";
 		while (iter.hasNext()) {
 			Document document = iter.next();
-			returnmessage = returnmessage + document.getString("lock") + ";" + document.getString("status") + ";";
+			returnmessage = returnmessage + document.getString("lock") + ";" + document.getString("status") + ";" +
+			document.getBoolean("active");
 		}
 		return returnmessage;
 	}
@@ -151,17 +152,28 @@ public class MongoDBController {
 		Document document = (Document) lockCollection.find(eq("type", "parent")).first();
 		return document.getString("ip");
 	}
+	
+	public String getMac(String lockname){
+		Document document = lockCollection.find(eq("lock", lockname)).first();
+		return document.getString("macadress");
+	}
 
 	public String addLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count();
 		if(lockCollection.find(eq("macadress", mac)).first() == null) {
 			Document document = new Document("lock", ("lock" + (length))).append("status", "unlocked").append("type", type)
-					.append("ip", ip).append("macadress", mac);
+					.append("ip", ip).append("macadress", mac).append("active", true);
 			lockCollection.insertOne(document);
 		} else {
 			lockCollection.findOneAndUpdate(eq("macadress", mac), set("ip", ip));
 		}
 		return "OK";
+	}
+	
+	public void changeActiveStatus(String lockname, Boolean ActiveStatus){{
+		lockCollection.findOneAndUpdate(eq("lock", lockname), set("active", ActiveStatus));
+	}
+		
 	}
 	
 	public String editLock(String oldLock, String newLock) {
@@ -185,7 +197,7 @@ public class MongoDBController {
 		System.out.println(length);
 		if (length < 1) {
 			Document document = new Document("lock", "parent").append("status", "unlocked").append("type", "parent")
-					.append("ip", ip).append("macadress", mac);
+					.append("ip", ip).append("macadress", mac).append("active", true);;
 			lockCollection.insertOne(document);
 			return "OK";
 		} else if(lockCollection.find(eq("macadress", mac)) != null) {

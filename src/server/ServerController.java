@@ -53,6 +53,7 @@ public class ServerController {
 			}
 		} else if (commando.equals("hej")) {
 			mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent");
+			mongodb.changeActiveStatus(message[1], true);
 			sendResponse("Ok from Server!,masterlock added!", socket);
 		} else if (commando.equals("key")) { // någon vred med nyckel
 			// logAction("låsnamn", message[2]);
@@ -92,7 +93,9 @@ public class ServerController {
 				logAction(message[4], "unlocked", mongodb.getUsername(message[1]), socket);
 			} else if(responseMessage.equals("The door is already locked")) {
 				logAction(message[4], "locked", mongodb.getUsername(message[1]), socket);
-			} else {
+			} else if(responseMessage.equals("")) {
+				//timeout
+				mongodb.changeActiveStatus(mongodb.getMac(message[4]), false); //låset har timeat ut;
 				// mongodb.logLockStatus(message[1], message[2]);
 				System.out.println("responseMessage= " + responseMessage);
 			}
@@ -103,6 +106,7 @@ public class ServerController {
 			String[] macip = responseMessage.split(";");
 			if (macip.length > 1) {
 				mongodb.addLock(macip[0], macip[1], "child");
+				mongodb.changeActiveStatus(macip[0], true);
 				sendResponse("lock added", socket);
 			} else {
 				sendResponse(responseMessage, socket);
