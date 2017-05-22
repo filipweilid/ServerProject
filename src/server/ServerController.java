@@ -56,9 +56,8 @@ public class ServerController {
 			mongodb.changeActiveStatus(message[1], true);
 			sendResponse("Ok from Server!,masterlock added!", socket);
 		} else if (commando.equals("key")) { // någon vred med nyckel
-			// logAction("låsnamn", message[2]);
-			// mongodb.logLockStatus("låsnamn", message[2]);
-			// mongodb.logDatabase("låsnamn", message[2], "nyckel");
+			logAction(mongodb.getLockName(socket.getInetAddress().toString().substring(1)), message[1], "key", socket);
+			sendResponse("OK", socket);
 		} else {
 			if (message.length > 1 && mongodb.checkKey(message[0], message[1]).equals("OK")) {
 				executeCommando(message[2], socket, message);
@@ -87,31 +86,41 @@ public class ServerController {
 			// responseMessage =
 			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
 			// message[2]);
-			String responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
-			if (responseMessage.equals("locked") || responseMessage.equals("unlocked")) {
-				logAction(message[4], responseMessage, mongodb.getUsername(message[1]), socket);
-			} else if(responseMessage.equals("The door is already unlocked")) {
-				logAction(message[4], "unlocked", mongodb.getUsername(message[1]), socket);
-			} else if(responseMessage.equals("The door is already locked")) {
-				logAction(message[4], "locked", mongodb.getUsername(message[1]), socket);
-			} else if(responseMessage.equals("error")) {
-				//timeout
-				mongodb.changeActiveStatus(mongodb.getMac(message[4]), false); //låset har timeat ut;
-				// mongodb.logLockStatus(message[1], message[2]);
-				System.out.println("responseMessage= " + responseMessage);
+			String responseMessage = "";
+			if(!mongodb.findIP(message[4]).equals("NOTOK")) {
+				responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
+				if (responseMessage.equals("locked") || responseMessage.equals("unlocked")) {
+					logAction(message[4], responseMessage, mongodb.getUsername(message[1]), socket);
+				} else if(responseMessage.equals("The door is already unlocked")) {
+					logAction(message[4], "unlocked", mongodb.getUsername(message[1]), socket);
+				} else if(responseMessage.equals("The door is already locked")) {
+					logAction(message[4], "locked", mongodb.getUsername(message[1]), socket);
+				} else if(responseMessage.equals("error")) {
+					//timeout
+					mongodb.changeActiveStatus(mongodb.getMac(message[4]), false); //låset har timeat ut;
+					// mongodb.logLockStatus(message[1], message[2]);
+					System.out.println("responseMessage= " + responseMessage);
+				}
+			} else {
+				responseMessage = "NOTOK";
 			}
 			sendResponse(responseMessage, socket);
 			break;
 		case "scan":
 			responseMessage = arduinocontroller.sendRequest(mongodb.getParent(), "3");
 			String[] macip = responseMessage.split(";");
-			if (macip.length > 1) {
-				mongodb.addLock(macip[0], macip[1], "child");
-				mongodb.changeActiveStatus(macip[0], true);
+			for(int i = 0; i < macip.length; i+=2) {
+				if (macip.length > 1) {
+					mongodb.addLock(macip[0+i], macip[1+i], "child");
+					mongodb.changeActiveStatus(macip[0+i], true);
+				}
+			}
+			if(macip.length > 1) {
 				sendResponse("lock added", socket);
 			} else {
 				sendResponse(responseMessage, socket);
 			}
+		
 			System.out.println("message recieve:" + responseMessage);
 			break;
 		case "get":
@@ -137,6 +146,9 @@ public class ServerController {
 			 break;
 		case "key":
 			sendResponse("la till logg", socket);
+			break;
+		case "changePassword":
+			sendResponse(mongodb.changePassword(message[3], hashPassword(message[4]), hashPassword(message[5])), socket);
 			break;
 		case "ping":
 			

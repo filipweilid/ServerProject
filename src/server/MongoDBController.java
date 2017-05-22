@@ -123,8 +123,11 @@ public class MongoDBController {
 	}
 	
 	public String findIP(String name){
-		Document document = (Document) lockCollection.find(eq("lock", name)).first();
-		return document.get("ip").toString();
+		if(lockCollection.find(eq("lock", name)).first() != null) {
+			Document document = (Document) lockCollection.find(eq("lock", name)).first();
+			return document.get("ip").toString();
+		}
+		return "NOTOK";
 	}
 
 	/*
@@ -154,10 +157,18 @@ public class MongoDBController {
 	}
 	
 	public String getMac(String lockname){
-		Document document = lockCollection.find(eq("lock", lockname)).first();
-		return document.getString("macadress");
+		if(lockCollection.find(eq("lock", lockname)).first() != null) {
+			Document document = lockCollection.find(eq("lock", lockname)).first();
+			return document.getString("macadress");
+		}
+		return "NOTOK";
 	}
 
+	public String getLockName(String ip) {
+		Document document = (Document) lockCollection.find(eq("ip", ip)).first();
+		return document.getString("lock");
+	}
+	
 	public String addLock(String mac, String ip, String type) {
 		int length = (int) lockCollection.count();
 		if(lockCollection.find(eq("macadress", mac)).first() == null) {
@@ -175,11 +186,24 @@ public class MongoDBController {
 	}
 	
 	public String editLock(String oldLock, String newLock) {
-		if(newLock.length() > 10){ //för långa namn buggar appen
+		if(newLock.length() > 15){ //för långa namn buggar appen
 			return "NOTOK";
 		}
 		lockCollection.findOneAndUpdate(eq("lock", oldLock), set("lock", newLock));
 		return "OK";
+	}
+	
+	public String changePassword(String username, String oldPassword, String newPassword) {
+		if (userCollection.find(eq("username", username)).first() != null) {
+			Document document = userCollection.find(eq("username", username)).first();
+			if(document.getString("password").equals(oldPassword)) {
+				userCollection.findOneAndUpdate(eq("username", username), set("password", newPassword));
+				return "OK";
+			} else {
+				return "NOTOK";
+			}
+		}
+		return "NOTOK";
 	}
 	
 	public String editUser(String oldUsername, String newUsername, String password, String role) {
