@@ -6,24 +6,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.UUID;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
-import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Updates.*;
 import java.security.*;
 
+/*
+ * Class that handles the logic in the server and determines what to do with incomming data
+ * from the ServerConnectivity class. 
+ * 
+ */
 public class ServerController {
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
