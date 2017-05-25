@@ -59,6 +59,12 @@ public class ServerConnectivity {
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
+					try {
+						socket.close();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			try {
