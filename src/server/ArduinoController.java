@@ -25,12 +25,12 @@ public class ArduinoController {
 		this.mongodb = controller;
 	}
 	
-	public String sendRequest(String lockname, String command){
+	public String sendRequest(String ip, String command){
 		try {
 			Socket socket = new Socket();
 			socket.connect(new InetSocketAddress(mongodb.getParent(), 8888), 10000); //fixar timeout
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			bw.write(createMessage(lockname, command));
+			bw.write(createMessage(ip, command));
 			bw.flush();
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			returnMessage = br.readLine();
