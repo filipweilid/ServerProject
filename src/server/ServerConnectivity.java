@@ -35,7 +35,7 @@ public class ServerConnectivity {
 
 	private class clientThread implements Runnable {
 		private Socket socket;
-		private String user;
+		private String id;
 
 		public clientThread(Socket socket) {
 			this.socket = socket;
@@ -48,19 +48,19 @@ public class ServerConnectivity {
 					String data = br.readLine();
 					if(data == null) { //socket closed, loggade ut eller avbröts
 						socket.close();
-						if(user != null) { //kollar om det är ett lås
-							controller.endConnection(user);
+						if(id != null) { //check if its a lock, lock has no id, prevents errors	
+							controller.endConnection(id); //terminates the session
 						}
 					} else {
-						String user = controller.processData(data, socket);
-						if(!user.equals("")){
-							this.user = user;
+						String id = controller.processData(data, socket);
+						if(!id.equals("")){
+							this.id = id;
 						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 					try {
-						socket.close();
+						socket.close(); //prevents error when internet connection i lost
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

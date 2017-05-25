@@ -25,7 +25,7 @@ public class MongoDBController {
 	private MongoDatabase database = mongoClient.getDatabase("test");
 	private MongoCollection<Document> logCollection = database.getCollection("log");
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
-	private MongoCollection<Document> userCollection = database.getCollection("users");
+	private MongoCollection<Document> userCollection = database	.getCollection("users");
 
 	/*
 	 * Logs data to the database

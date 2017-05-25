@@ -74,9 +74,6 @@ public class ServerController {
 			break;
 		case "lock":
 			System.out.println(message[4]);
-			// responseMessage =
-			// arduinocontroller.sendRequest(mongodb.getChildIP(message[1]),
-			// message[2]);
 			String responseMessage = "";
 			if(!mongodb.findIP(message[4]).equals("NOTOK")) {
 				responseMessage = arduinocontroller.sendRequest(mongodb.findIP(message[4]), message[3]);
@@ -135,15 +132,8 @@ public class ServerController {
 		case "editLock":
 			 sendResponse(mongodb.editLock(message[3], message[4]), socket);
 			 break;
-		case "key":
-			sendResponse("la till logg", socket);
-			break;
 		case "changePassword":
 			sendResponse(mongodb.changePassword(message[3], hashPassword(message[4]), hashPassword(message[5])), socket);
-			break;
-		case "ping":
-			
-			
 			break;
 		default:
 			sendResponse("Server couldnt process the data", socket);

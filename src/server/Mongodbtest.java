@@ -91,21 +91,25 @@ public class Mongodbtest {
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 //	Mongodbtest test = new Mongodbtest();
 //	test.test();
-	MongoDBController test = new MongoDBController();
-	SessionManager sessionManager = new SessionManager(test);
-	test.createUser("test", hashPassword("hejhej"), "admin");
-	test.createUser("filippleb", hashPassword("testtest"), "pleb");
-	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
-	System.out.println(test.verifyLogin("filippleb", hashPassword("testtest")));
-	String testare =  "placeholder";
-	String testare2 = "filipärpleb";
-	sessionManager.start(testare, "test");
-	sessionManager.start(testare2, "filippleb");
+//	MongoDBController test = new MongoDBController();
+//	SessionManager sessionManager = new SessionManager(test);
+//	test.createUser("test", hashPassword("hejhej"), "admin");
+//	test.createUser("filippleb", hashPassword("testtest"), "pleb");
+//	System.out.println(test.verifyLogin("test", hashPassword("hejhej")));
+//	System.out.println(test.verifyLogin("filippleb", hashPassword("testtest")));
+//	String testare =  "placeholder";
+//	String testare2 = "filipärpleb";
+//	sessionManager.start(testare, "test");
+//	sessionManager.start(testare2, "filippleb");
 //		System.out.println(controller.getID("a"));
 //		String key = generateKey();
 //		new Session(controller, "a", key).start();
 //		System.out.println(controller.checkKey(key, "58f60863e9203a13ec26f944"));
 //		User user = new User("hej", "hej", "hej");
+		String test = generateKey();
+		//test.getBytes();
+		System.out.println(test+ "\n" + test.length());
+		
 		
 		
 		
