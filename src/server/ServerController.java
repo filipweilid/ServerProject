@@ -67,9 +67,6 @@ public class ServerController {
 	 */
 	public void executeCommando(String commando, Socket socket, String[] message) {
 		switch (commando) {
-		case "log":
-			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
-			break;
 		case "lock":
 			System.out.println(message[4]);
 			String responseMessage = "";
