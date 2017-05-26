@@ -3,8 +3,9 @@ package server;
 import java.io.*;
 import java.net.*;
 
-//SERVERN SOM LYSSNAR PÅ INKOMMANDE TRAFIK OCH ANVÄNDER SERVERCONTROLLER FÖR 
-//ATT VETA VAD SOM SKA SKE
+/*
+ * Class that handles the connections to the server using a serveSocket
+ */
 public class ServerConnectivity {
 	private ServerController controller;
 	private int port;
@@ -12,12 +13,11 @@ public class ServerConnectivity {
 	public ServerConnectivity(int port, ServerController controller) {
 		this.port = port;
 		this.controller = controller;
-		System.out.println("Server Started and listening to the port 25000");
 		getConnection();
 	}
 
 	/*
-	 * Method that listens to the serversocket and executes the action
+	 * Creates a new socket when a client connects and starts a new thread
 	 */
 	public void getConnection() {
 		try {
@@ -32,15 +32,20 @@ public class ServerConnectivity {
 			e.printStackTrace();
 		}
 	}
-
+	/*
+	 * Inner class that handlers the client that connected to the server
+	 */
 	private class clientThread implements Runnable {
 		private Socket socket;
 		private String id;
-
+		
 		public clientThread(Socket socket) {
 			this.socket = socket;
 		}
-
+		/*
+		 * The run method which is called when a new thread is started. 
+		 * Listens to incoming messages and processes them
+		 */
 		public void run() {
 			while (!socket.isClosed()) {
 				try {
@@ -62,7 +67,6 @@ public class ServerConnectivity {
 					try {
 						socket.close(); //prevents error when internet connection i lost
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}

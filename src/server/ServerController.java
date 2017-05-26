@@ -22,23 +22,22 @@ public class ServerController {
 	public ServerController() {
 		new ServerConnectivity(25000, this);
 	}
-
+	/*
+	 * Processes the data from the client
+	 * 
+	 */
 	public String processData(String data, Socket socket) {
 		System.out.println("Message is: " + data);
 		String[] message = data.split(";");
 		String commando = message[0];
-		// 3 fall utan session key, 2 kommer från arduino och vid login
+		// 3 cases with no sessiokey, checked for first
 		if (commando.equals("login")) {
 			String verify = mongodb.verifyLogin(message[1], hashPassword(message[2]));
 			if (!verify.equals("NOTOK")) {
-				String key = generateKey(); // genererar en session key
-				//SessionManager ses = new SessionManager(mongodb, message[1], key);// skapar
-				sessionManager.start(key, mongodb.getID(message[1]));												// timer för
-				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); // skickar
-				//return message[1];
+				String key = generateKey(); // generates a sessionkey
+				sessionManager.start(key, mongodb.getID(message[1]));											
+				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); //send back sessionkey+userID
 				return mongodb.getID(message[1]);
-				// tillbaka key
-				// + id
 			} else {
 				sendResponse(verify, socket);
 			}
@@ -46,7 +45,7 @@ public class ServerController {
 			mongodb.addMasterLock(message[1], socket.getInetAddress().toString().substring(1), "parent");
 			mongodb.changeActiveStatus(message[1], true);
 			sendResponse("Ok from Server!,masterlock added!", socket);
-		} else if (commando.equals("key")) { // någon vred med nyckel
+		} else if (commando.equals("key")) { // someone used the key
 			logAction(mongodb.getLockName(socket.getInetAddress().toString().substring(1)), message[1], "key", socket);
 			sendResponse("OK", socket);
 		} else {
@@ -57,19 +56,18 @@ public class ServerController {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
 		return "";
 	}
-
+	/*
+	 * Executes the commando recieved from the client
+	 */
 	public void executeCommando(String commando, Socket socket, String[] message) {
 		switch (commando) {
 		case "log":
-			// mongodb.logDatabase(message[1],
-			// socket.getInetAddress().toString(), message[2]);
 			sendResponse("Logged action for " + message[1] + " by: " + socket.getInetAddress().toString(), socket);
 			break;
 		case "lock":
@@ -85,8 +83,7 @@ public class ServerController {
 					logAction(message[4], "locked", mongodb.getUsername(message[1]), socket);
 				} else if(responseMessage.equals("error")) {
 					//timeout
-					mongodb.changeActiveStatus(mongodb.getMac(message[4]), false); //låset har timeat ut;
-					// mongodb.logLockStatus(message[1], message[2]);
+					mongodb.changeActiveStatus(mongodb.getMac(message[4]), false);
 					System.out.println("responseMessage= " + responseMessage);
 				}
 			} else {
@@ -108,7 +105,6 @@ public class ServerController {
 			} else {
 				sendResponse(responseMessage, socket);
 			}
-		
 			System.out.println("message recieve:" + responseMessage);
 			break;
 		case "get":
@@ -140,22 +136,30 @@ public class ServerController {
 			break;
 		}
 	}
-
+	/*
+	 * Method for logging the action in database
+	 */
 	public void logAction(String lock, String status, String username, Socket socket) {
 		mongodb.logDatabase(status, socket.getInetAddress().toString().substring(1), username, lock);
 		mongodb.logLockStatus(lock, status);
 	}
-	
-	public void endConnection(String user){
-		sessionManager.terminate(user);
+	/*
+	 * Terminates the connection with a user
+	 */
+	public void endConnection(String userid){
+		sessionManager.terminate(userid);
 	}
-
+	/*
+	 * Generates a unique sessionkey
+	 */
 	private String generateKey() {
 		UUID id = UUID.randomUUID();
-		String key = id.toString();
-		return key;
+		String sessionkey = id.toString();
+		return sessionkey;
 	}
-
+	/*
+	 * Hashes the password
+	 */
 	public String hashPassword(String password) {
 		MessageDigest digest;
 		try {
@@ -164,7 +168,6 @@ public class ServerController {
 			String encoded = Base64.getEncoder().encodeToString(hash);
 			return encoded;
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return "error";

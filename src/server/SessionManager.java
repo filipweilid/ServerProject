@@ -11,20 +11,23 @@ public class SessionManager {
 	
 	private MongoDBController controller;
 	private Timer timer = new Timer();
-	private ArrayList<SessionTask> sessionTasks = new ArrayList<SessionTask>();
+	private ArrayList<SessionTask> sessionTasks = new ArrayList<SessionTask>(); 
 
 	public SessionManager(MongoDBController controller) {
 		this.controller = controller;
 	}
-
-	public void start(String key, String user) {
-		controller.addKey(key, user);
-		System.out.println(key);
-		SessionTask task = new SessionTask(user);
+	/*
+	 * Starts a new session for a specific user
+	 */
+	public void start(String key, String id) {
+		controller.addKey(key, id);
+		SessionTask task = new SessionTask(id);
 		sessionTasks.add(task);
 		timer.schedule(task, 1000 * 60 * 10); // 10min
 	}
-
+	/*
+	 * Removes the sessiontask
+	 */
 	private SessionTask removeUserSession(String user) {
 		for(int i = 0; i < sessionTasks.size(); i++){
 			if(sessionTasks.get(i).getUser().equals(user)){
@@ -34,26 +37,31 @@ public class SessionManager {
 		}
 		return null;
 	}
-
-	public void terminate(String user) {
-		controller.removeKey(user);
-		System.out.println(removeUserSession(user).getUser());
+	/*
+	 * Removes the sessionkey and removes the sessiontask
+	 */
+	public void terminate(String id) {
+		controller.removeKey(id);
+		removeUserSession(id);
+		//System.out.println(removeUserSession(id).getUser());
 		System.out.println(sessionTasks.size());
 	}
 
-
+	/*
+	 * Inner class that extends TimerTask to create a custom event to occur
+	 */
 	private class SessionTask extends TimerTask{
-		private String user;
-		public SessionTask(String user){
-			this.user = user;
+		private String id;
+		public SessionTask(String id){
+			this.id = id;
 		}
 		
 		public String getUser(){
-			return this.user;
+			return this.id;
 		}
 		
 		public void run() {
-			terminate(this.user);
+			terminate(this.id);
 		}
 	}
 }
