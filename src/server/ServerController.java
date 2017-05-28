@@ -19,6 +19,7 @@ public class ServerController {
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private SessionManager sessionManager = new SessionManager(mongodb);
+	
 	public ServerController() {
 		new ServerConnectivity(25000, this);
 	}

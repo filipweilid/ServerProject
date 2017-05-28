@@ -21,12 +21,11 @@ public class ServerConnectivity {
 	 */
 	public void getConnection() {
 		try {
-			// Server is running always. This is done using this while(true)
 			ServerSocket serverSocket = new ServerSocket(port);
 			while (true) {
 				Socket socket = serverSocket.accept(); //blocks
 				System.out.println(socket.getInetAddress().toString() + " connected");
-				new Thread(new clientThread(socket)).start(); // starts new thread
+				new Thread(new clientThread(socket)).start(); // starts new thread	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,7 +57,7 @@ public class ServerConnectivity {
 						}
 					} else {
 						String id = controller.processData(data, socket);
-						if(!id.equals("")){
+						if(!id.equals("")){ //it's a user
 							this.id = id;
 						}
 					}
