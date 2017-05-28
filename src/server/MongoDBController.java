@@ -83,7 +83,7 @@ public class MongoDBController {
 	}
 	
 	/*
-	 * Adds a sessionkey to a specific usernameobject in the dataname
+	 * Adds a sessionkey to a specific usernameobject in the database
 	 */
 	public void addKey(String key, String id) {
 		ObjectId object = new ObjectId(id);
