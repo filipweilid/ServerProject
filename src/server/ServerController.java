@@ -34,9 +34,10 @@ public class ServerController {
 			String verify = mongodb.verifyLogin(message[1], hashPassword(message[2]));
 			if (!verify.equals("NOTOK")) {
 				String key = generateKey(); // generates a sessionkey
-				sessionManager.start(key, mongodb.getID(message[1]));											
+				String id = mongodb.getID(message[1]);
+				sessionManager.start(key, id);											
 				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); //send back sessionkey+userID
-				return mongodb.getID(message[1]);
+				return id;
 			} else {
 				sendResponse(verify, socket);
 			}
