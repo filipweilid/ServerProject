@@ -26,7 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-
+/*
+ * Tesclass for learning and understanding the mongoDB eclipse integration
+ * Viktor Kullberg, Filip Weilid
+ */
 public class MongoDBTest extends JPanel implements ActionListener {
 	private JTextField tfUsername = new JTextField();
 	private JTextField tfPassword = new JTextField();

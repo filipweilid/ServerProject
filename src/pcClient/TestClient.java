@@ -4,7 +4,10 @@ import java.io.*;
 import java.net.*;
 
 public class TestClient {
-
+	/*
+	 * Simple testclient for testing serverfuncionality
+	 * Viktor Kullberg
+	 */
 	private static Socket socket;
 	private String host = "localhost";
 	private int port = 25000;
