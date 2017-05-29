@@ -14,15 +14,13 @@ import java.security.*;
  * Class that handles the logic in the server and determines what to do with incomming data
  * from the ServerConnectivity class. 
  * 
+ * @author Filip Weilid, Viktor Kullberg
  */
 public class ServerController {
 	private MongoDBController mongodb = new MongoDBController();
 	private ArduinoController arduinocontroller = new ArduinoController(mongodb);
 	private SessionManager sessionManager = new SessionManager(mongodb);
 	
-	public ServerController() {
-		new ServerConnectivity(25000, this);
-	}
 	/*
 	 * Processes the data from the client
 	 * 
@@ -185,9 +183,5 @@ public class ServerController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-		new ServerController();
 	}
 }

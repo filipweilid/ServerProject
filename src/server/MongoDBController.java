@@ -19,6 +19,8 @@ import com.mongodb.client.MongoDatabase;
 /*
  * Class that handles the database, including several methods
  * for retrieving or storing information in said database
+ * 
+ * @author Filip Weilid, Viktor Kullberg
  */
 public class MongoDBController {
 	private MongoClient mongoClient = new MongoClient("localhost", 27017);

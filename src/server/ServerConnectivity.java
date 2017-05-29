@@ -5,6 +5,8 @@ import java.net.*;
 
 /*
  * Class that handles the connections to the server using a serveSocket
+ * 
+ * @author Filip Weilid, Viktor Kullberg
  */
 public class ServerConnectivity {
 	private ServerController controller;

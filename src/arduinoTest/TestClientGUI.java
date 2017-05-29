@@ -3,7 +3,7 @@ package arduinoTest;
 import javax.swing.JFrame;
 /**
  * Startar ClientGUI
- * @author Grupp4
+ * @author Viktor Werngren
  *
  */
 

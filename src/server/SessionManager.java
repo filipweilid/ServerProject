@@ -6,6 +6,8 @@ import java.util.TimerTask;
 import java.util.UUID;
 /*
  * Hanndles the user sessions
+ * 
+ * @author Viktor Kullberg
  */
 public class SessionManager {
 	

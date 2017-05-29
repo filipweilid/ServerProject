@@ -17,7 +17,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/*
+ * Viktor Werngren
+ */
 
 public class ClientGUI extends JPanel implements ActionListener {
 	private JPanel panel1 = new JPanel(new GridLayout(2, 2));
