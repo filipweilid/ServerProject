@@ -16,7 +16,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-/*
+/**
  * Class that handles the database, including several methods
  * for retrieving or storing information in said database
  * 
@@ -29,7 +29,7 @@ public class MongoDBController {
 	private MongoCollection<Document> lockCollection = database.getCollection("lockStatus");
 	private MongoCollection<Document> userCollection = database	.getCollection("users");
 
-	/*
+	/**
 	 * Logs data to the database
 	 */
 	public void logDatabase(String action, String ip, String username, String lock) {
@@ -42,7 +42,7 @@ public class MongoDBController {
 		logCollection.insertOne(document);
 	}
 
-	/*
+	/**
 	 * Fetches and returns the log as a string
 	 */
 	public String fetchLog() {
@@ -57,7 +57,7 @@ public class MongoDBController {
 		return returnmessage;
 	}
 
-	/*
+	/**
 	 * Fetches log for a specific user
 	 */
 	public String fetchLogForUser(String username) {
@@ -72,7 +72,7 @@ public class MongoDBController {
 		return returnmessage;
 	}
 
-	/*
+	/**
 	 * Checks with database if username and password is correct
 	 */
 	public String verifyLogin(String user, String password) {
@@ -84,7 +84,7 @@ public class MongoDBController {
 		}
 	}
 	
-	/*
+	/**
 	 * Adds a sessionkey to a specific usernameobject in the database
 	 */
 	public void addKey(String key, String id) {
@@ -92,7 +92,7 @@ public class MongoDBController {
 		userCollection.updateOne(eq("_id", object), set("sessionkey", key));
 	}
 	
-	/*
+	/**
 	 * Removes the sessionkey from the specific userobject in the database
 	 */
 	public void removeKey(String id) {
@@ -100,7 +100,7 @@ public class MongoDBController {
 		userCollection.updateOne(eq("_id", object), set("sessionkey", "default"));
 	}
 	
-	/*
+	/**
 	 * Checks if the sessionkey for a specifik user is valid
 	 */
 	public String checkKey(String key, String id) {
@@ -115,7 +115,7 @@ public class MongoDBController {
 		}
 	}
 	
-	/*
+	/**
 	 * Retrieves and returns the userobject id for a specific user as a String
 	 */
 	public String getID(String user) {
@@ -123,7 +123,7 @@ public class MongoDBController {
 		return document.getObjectId("_id").toHexString();
 	}
 	
-	/*
+	/**
 	 * Retrieves and returns the username for soecifikt userobject
 	 */
 	public String getUsername(String id) {
@@ -131,14 +131,14 @@ public class MongoDBController {
 		return document.get("username").toString();
 	}
 
-	/*
+	/**
 	 * Changes the status of lock
 	 */
 	public void logLockStatus(String lock, String status) {
 		lockCollection.updateOne(eq("lock", lock), set("status", status));
 	}
 	
-	/*
+	/**
 	 * Retrieves the ip for a lock and returns it as a String
 	 */
 	public String findIP(String name){
@@ -149,7 +149,7 @@ public class MongoDBController {
 		return "NOTOK";
 	}
 
-	/*
+	/**
 	 * Retrieves the lockstatus of all locks
 	 */
 	public String getLockStatus() {
@@ -163,7 +163,7 @@ public class MongoDBController {
 		return returnmessage;
 	}
 	
-	/*
+	/**
 	 * Retrieves the ip of a childlock and returns it
 	 */
 	public String getChildIP(String lock) {
@@ -171,7 +171,7 @@ public class MongoDBController {
 		return document.getString("ip");
 	}
 	
-	/*
+	/**
 	 * Retrieves the ip of the parent lock and returns it
 	 */
 	public String getParent() {
@@ -179,7 +179,7 @@ public class MongoDBController {
 		return document.getString("ip");
 	}
 	
-	/*
+	/**
 	 * Retrives and returns the macadress of a specified lock
 	 */
 	public String getMac(String lockname){
@@ -190,7 +190,7 @@ public class MongoDBController {
 		return "NOTOK";
 	}
 
-	/*
+	/**
 	 * Adds a specific lock to the database
 	 */
 
@@ -211,14 +211,14 @@ public class MongoDBController {
 		return "OK";
 	}
 	
-	/*
+	/**
 	 * Changes the active field of a lock, true/false
 	 */
 	public void changeActiveStatus(String mac, Boolean ActiveStatus) {
 		lockCollection.findOneAndUpdate(eq("macadress", mac), set("active", ActiveStatus));
 	}
 	
-	/*
+	/**
 	 * Edits the name of a specific lock
 	 */
 	public String editLock(String oldLock, String newLock) {
@@ -229,8 +229,8 @@ public class MongoDBController {
 		return "OK";
 	}
 	
-	/*
-	 * Edits a user
+	/**
+	 * Edits the password of the specified user
 	 */
 	public String changePassword(String username, String oldPassword, String newPassword) {
 		if (userCollection.find(eq("username", username)).first() != null) {
@@ -244,7 +244,14 @@ public class MongoDBController {
 		}
 		return "NOTOK";
 	}
-	
+	/**
+	 * Edits a user
+	 * @param oldUsername
+	 * @param newUsername
+	 * @param password
+	 * @param role
+	 * @return
+	 */
 	public String editUser(String oldUsername, String newUsername, String password, String role) {
 		if(newUsername.length() > 10){ //cant have to long names
 			return "NOTOK";
@@ -259,7 +266,7 @@ public class MongoDBController {
 		return "NOTOK";
 	}
 	
-	/*
+	/**
 	 * Adds a masterlock, only one master lock can be added
 	 */
 	public String addMasterLock(String mac, String ip, String type) {
@@ -279,7 +286,7 @@ public class MongoDBController {
 
 	// ***____________________ADMIN--METODER_______________***//
 
-	/*
+	/**
 	 * Creates a new user
 	 */
 	public String createUser(String username, String password, String role) {
@@ -295,7 +302,7 @@ public class MongoDBController {
 		return "NOTOK";
 	}
 
-	/*
+	/**
 	 * Removes a user
 	 */
 	public String removeUser(String username) {
@@ -305,7 +312,7 @@ public class MongoDBController {
 		return "NOTOK";
 	}
 
-	/*
+	/**
 	 * Retrieves all users
 	 */
 	public String getUsers() {

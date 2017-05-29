@@ -41,7 +41,7 @@ public class ServerConnectivity {
 		private String id;
 		
 		public clientThread(Socket socket) {
-			this.socket = socket;
+			this.socket = socket;	
 		}
 		/*
 		 * The run method which is called when a new thread is started. 

@@ -36,8 +36,8 @@ public class ServerController {
 				String key = generateKey(); // generates a sessionkey
 				String id = mongodb.getID(message[1]);
 				sessionManager.start(key, id);											
-				sendResponse(verify + ";" + key + ";" + mongodb.getID(message[1]), socket); //send back sessionkey+userID
-				return id;
+				sendResponse(verify + ";" + key + ";" + id, socket); //send back sessionkey+userID
+				return id;	
 			} else {
 				sendResponse(verify, socket);
 			}
